@@ -9,6 +9,7 @@ using Selenium_TestFrameWork.CustomException;
 using System;
 using NUnit.Allure.Core;
 using Allure.Commons;
+using OpenQA.Selenium.Support.Extensions;
 
 namespace UI_Tests.BaseClass
 {
@@ -37,7 +38,6 @@ namespace UI_Tests.BaseClass
                 _ => throw new NoSuitableDriverFound("Driver Not Found: {0}" + Config.BrowserType.ToString()),
             };
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Config.PageLoadTimeout);
-            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Config.ElementLoadTimeout);
             driver.NavigateToUrl(Config.WebSite);
             driver.MaxBrowser();
         }
@@ -56,8 +56,8 @@ namespace UI_Tests.BaseClass
             }
             else if (TestContext.CurrentContext.Result.Outcome.Status.ToString().Equals("Failed"))
             {
-                string path = driver.TakeScreenShot();
-                AllureLifecycle.Instance.AddAttachment("ScreenShot", "screenshot/Png", path);
+                AllureLifecycle.Instance.AddAttachment($"Screenshot [{DateTime.Now:HH:mm:ss}]",
+                    "image/png", driver.TakeScreenshot().AsByteArray);
             }
         }
 
