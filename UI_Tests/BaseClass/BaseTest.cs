@@ -38,7 +38,6 @@ namespace UI_Tests.BaseClass
 
             driver.NavigateToUrl(Config.WebSite);
             driver.MaxBrowser();
-            Console.WriteLine(Directory.GetCurrentDirectory());
         }
 
         [TearDown]
