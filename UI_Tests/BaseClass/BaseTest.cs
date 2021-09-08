@@ -7,10 +7,8 @@ using Selenium_TestFrameWork.WebDriverExtention;
 using Selenium_TestFrameWork.Configuration;
 using Selenium_TestFrameWork.CustomException;
 using System;
-using Selenium_TestFrameWork;
 using NUnit.Allure.Core;
 using Allure.Commons;
-using System.IO;
 
 namespace UI_Tests.BaseClass
 {
@@ -19,10 +17,10 @@ namespace UI_Tests.BaseClass
     public class BaseTest
     {
         protected IWebDriver driver;
-        private IWebDriver GetChromeDriver() 
+        private static IWebDriver GetChromeDriver()
         {
-            ChromeOptions options = new ChromeOptions();
-            options.AddArguments("--headless");
+            ChromeOptions options = new();
+            if (!string.IsNullOrEmpty(Config.ChromeOptions)) options.AddArguments(Config.ChromeOptions);
             return new ChromeDriver(options);
         }
 
@@ -38,12 +36,16 @@ namespace UI_Tests.BaseClass
                 BrowserType.IExplorer => new InternetExplorerDriver(),
                 _ => throw new NoSuitableDriverFound("Driver Not Found: {0}" + Config.BrowserType.ToString()),
             };
-            LogHelper.log.Info("InitWebDriver: " + Config.BrowserType);
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Config.PageLoadTimeout);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Config.ElementLoadTimeout);
-
+            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Config.ElementLoadTimeout);
             driver.NavigateToUrl(Config.WebSite);
             driver.MaxBrowser();
+        }
+
+        [SetUp]
+        public void GetConfiguration()
+        {
+            Config.WriteConfig2Console();
         }
 
         [TearDown]
