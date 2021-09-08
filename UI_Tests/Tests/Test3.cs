@@ -10,7 +10,7 @@ namespace UI_Tests.Tests
     {
         [Test]
 
-        public void MyTest()
+        public void GGGGGGGG()
         {
             Console.WriteLine(Directory.GetCurrentDirectory());
         }
