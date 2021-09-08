@@ -22,10 +22,7 @@ namespace UI_Tests.BaseClass
         private IWebDriver GetChromeDriver() 
         {
             ChromeOptions options = new ChromeOptions();
-            options.AddArguments("--no-sandbox"); // Bypass OS security model
-            options.AddArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-            options.AddArguments("--disable-extensions"); // disabling extensions
-            options.AddArguments("--remote-debugging-port = 9222"); // disabling extensions
+            options.AddArguments("--headless");
             return new ChromeDriver(options);
         }
 
