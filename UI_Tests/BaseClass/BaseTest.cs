@@ -19,6 +19,13 @@ namespace UI_Tests.BaseClass
     public class BaseTest
     {
         protected IWebDriver driver;
+        private IWebDriver GetChromeDriver() 
+        {
+            ChromeOptions options = new ChromeOptions();
+            options.AddArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+            options.AddArguments("--no-sandbox"); // Bypass OS security model
+            return new ChromeDriver(options);
+        }
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -28,7 +35,7 @@ namespace UI_Tests.BaseClass
             driver = Config.BrowserType switch
             {
                 BrowserType.Firefox => new FirefoxDriver(),
-                BrowserType.Chrome => new ChromeDriver(Directory.GetCurrentDirectory()),
+                BrowserType.Chrome => GetChromeDriver(),
                 BrowserType.IExplorer => new InternetExplorerDriver(),
                 _ => throw new NoSuitableDriverFound("Driver Not Found: {0}" + Config.BrowserType.ToString()),
             };
