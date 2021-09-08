@@ -10,6 +10,7 @@ using System;
 using Selenium_TestFrameWork;
 using NUnit.Allure.Core;
 using Allure.Commons;
+using System.IO;
 
 namespace UI_Tests.BaseClass
 {
@@ -27,7 +28,7 @@ namespace UI_Tests.BaseClass
             driver = Config.BrowserType switch
             {
                 BrowserType.Firefox => new FirefoxDriver(),
-                BrowserType.Chrome => new ChromeDriver(),
+                BrowserType.Chrome => new ChromeDriver(Directory.GetCurrentDirectory()),
                 BrowserType.IExplorer => new InternetExplorerDriver(),
                 _ => throw new NoSuitableDriverFound("Driver Not Found: {0}" + Config.BrowserType.ToString()),
             };
@@ -37,6 +38,7 @@ namespace UI_Tests.BaseClass
 
             driver.NavigateToUrl(Config.WebSite);
             driver.MaxBrowser();
+            Console.WriteLine(Directory.GetCurrentDirectory());
         }
 
         [TearDown]
