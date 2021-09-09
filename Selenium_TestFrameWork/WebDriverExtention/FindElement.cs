@@ -13,6 +13,20 @@ namespace Selenium_TestFrameWork.WebDriverExtention
             }
             catch (Exception)
             {
+                LogHelper.log.Error("Locator did not find: " + locator.ToString());
+                return false;
+            }
+        }
+
+        public static bool IsElementPresent(this IWebElement webElement, By locator)
+        {
+            try
+            {
+                return webElement.FindElements(locator).Count == 1;
+            }
+            catch (Exception)
+            {
+                LogHelper.log.Error("Locator did not find: " + locator.ToString());
                 return false;
             }
         }
@@ -21,6 +35,18 @@ namespace Selenium_TestFrameWork.WebDriverExtention
             if (driver.IsElementPresent(locator))
             {
                 return driver.FindElement(locator);
+            }
+            else
+            {
+                throw new NoSuchElementException("Element Not Found: " + locator.ToString());
+            }
+        }
+
+        public static IWebElement GetElement(this IWebElement webElement, By locator)
+        {
+            if (webElement.IsElementPresent(locator))
+            {
+                return webElement.FindElement(locator);
             }
             else
             {

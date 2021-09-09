@@ -68,11 +68,11 @@ namespace UI_Tests.BaseClass
             return new Cars(driver);
         }
 
-        public SignIn NavigateToSignIn()
+        public Login NavigateToSignIn()
         {
             driver.ClickButton(AccountMenu);
             driver.ClickButton(SignInMenuBtn);
-            return new SignIn(driver);
+            return new Login(driver);
         }
         #endregion Navigation
 

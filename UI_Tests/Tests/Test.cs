@@ -2,6 +2,7 @@
 using Selenium_TestFrameWork;
 using System;
 using UI_Tests.BaseClass;
+using UI_Tests.PageObject;
 
 namespace UI_Tests.Tests
 {
@@ -12,10 +13,9 @@ namespace UI_Tests.Tests
         [Order(1)]
         public void MyTest()
         {
-            Console.WriteLine(driver.GetHashCode());
             LogHelper.log.Info("Starting Test: " + TestContext.CurrentContext.Test.Name);
-            LogHelper.log.Info(TestContext.CurrentContext.Test.Name);
-            //Home hp = new Home(driver);
+            Home hp = new(driver);
+            hp.GetLoginPage();
             //Cars cars = hp.NavigateToCars();
             //log.Info("Navigated To Cars Page");
 
@@ -36,11 +36,7 @@ namespace UI_Tests.Tests
         [Order(2)]
         public void MyTestWrong()
         {
-            Console.WriteLine(driver.GetHashCode());
-            Console.Beep();
-            LogHelper.log.Info("Starting Test: " + TestContext.CurrentContext.Test.Name);
-            LogHelper.log.Info(TestContext.CurrentContext.Test.Name);
-            Assert.Fail();
+            
         }
     }
 }

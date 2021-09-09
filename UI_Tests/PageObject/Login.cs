@@ -4,7 +4,7 @@ using UI_Tests.BaseClass;
 
 namespace UI_Tests.PageObject
 {
-    public class SignIn : BasePage
+    public class Login : BasePage
     {
         #region IWebElements
         By SignInWithFaceBookBtn = By.Id("e3login-facebook-button"); //Sign in with Facebook
@@ -14,7 +14,7 @@ namespace UI_Tests.PageObject
         By ForgotYourPasswordLnk = By.Id("go-to-forgot-password"); //Forgot your password?
         By SignInBtn = By.Id("submitButton"); //Sign In button
         #endregion IWebElements
-        public SignIn(IWebDriver _driver) : base(_driver)
+        public Login(IWebDriver _driver) : base(_driver)
         { }
 
         #region Action

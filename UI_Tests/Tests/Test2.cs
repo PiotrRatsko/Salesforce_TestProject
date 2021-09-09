@@ -12,9 +12,7 @@ namespace UI_Tests.Tests
         [Order(1)]
         public void MyTest2()
         {
-            Console.WriteLine(driver.GetHashCode());
-            LogHelper.log.Info("Starting Test: " + TestContext.CurrentContext.Test.Name);
-            LogHelper.log.Info(TestContext.CurrentContext.Test.Name);
+            
         }
 
         [Test]
@@ -22,10 +20,7 @@ namespace UI_Tests.Tests
         [Order(2)]
         public void MyTest2Wrong()
         {
-            Console.WriteLine(driver.GetHashCode());
-            LogHelper.log.Info("Starting Test: " + TestContext.CurrentContext.Test.Name);
-            LogHelper.log.Info(TestContext.CurrentContext.Test.Name);
-            Assert.Fail();
+            
         }
     }
 }
