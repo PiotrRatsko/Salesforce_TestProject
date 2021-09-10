@@ -56,23 +56,12 @@ namespace UI_Tests.BaseClass
         }
 
         #region Navigation
-        public VacationRentals NavigateToVacationRentals()
-        {
-            driver.ClickButton(VacationRentals_Hmenu);
-            return new VacationRentals(driver);
-        }
 
-        public Cars NavigateToCars()
-        {
-            driver.ClickButton(Cars_Hmenu);
-            return new Cars(driver);
-        }
-
-        public Login NavigateToSignIn()
+        public LoginPage NavigateToSignIn()
         {
             driver.ClickButton(AccountMenu);
             driver.ClickButton(SignInMenuBtn);
-            return new Login(driver);
+            return new LoginPage(driver);
         }
         #endregion Navigation
 

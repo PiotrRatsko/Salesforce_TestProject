@@ -4,10 +4,10 @@ using Selenium_TestFrameWork.WebDriverExtention;
 
 namespace UI_Tests.PageObject
 {
-    public class Home
+    public class StartPage
     {
         private readonly IWebDriver driver;
-        public Home(IWebDriver _driver)
+        public StartPage(IWebDriver _driver)
         {
             driver = _driver;
             LogHelper.log.Info("initialized : " + this.GetType().Name);
@@ -18,11 +18,11 @@ namespace UI_Tests.PageObject
         #endregion IWebElements
 
         #region Actions
-        public Login GetLoginPage()
+        public LoginPage GetLoginPage()
         {
             driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
             LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
-            return new Login(driver);
+            return new LoginPage(driver);
         }
         #endregion Actions 
     }
