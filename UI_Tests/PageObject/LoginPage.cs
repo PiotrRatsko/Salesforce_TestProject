@@ -10,8 +10,8 @@ namespace UI_Tests.PageObject
 
         public LoginPage(IWebDriver _driver)
         {
-            driver = _driver;
             LogHelper.log.Info("initialized : " + this.GetType().Name);
+            driver = _driver;
         }
 
         #region IWebElements
@@ -21,12 +21,13 @@ namespace UI_Tests.PageObject
         #endregion IWebElements
 
         #region Action
-        public void LogIn(string userName, string password)
+        public BasePage LogInAndGetBasePage(string userName, string password)
         {
             LogHelper.log.Info("Making LogIn:");
             driver.TypeInTextBox(UserNameTxtBox, userName);
             driver.TypeInTextBox(PasswordTxtBox, password);
             driver.ClickButton(LogInBtn);
+            return new BasePage(driver);
         }
         #endregion Action
     }

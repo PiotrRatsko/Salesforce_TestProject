@@ -14,9 +14,8 @@ namespace UI_Tests.PageObjectTests.Login
         public void CorrectLogInTest()
         {
             LogHelper.log.Info("Starting Test: " + TestContext.CurrentContext.Test.Name);
-            StartPage hp = new(driver);
-            hp.GetLoginPage().LogIn(Config.UserName, Config.Password);
-            Thread.Sleep(10000);
+            StartPage sp = new(driver);
+            BasePage bp = sp.GetLoginPage().LogInAndGetBasePage(Config.UserName, Config.Password);
         }
     }
 }

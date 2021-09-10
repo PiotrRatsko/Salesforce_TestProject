@@ -9,8 +9,8 @@ namespace UI_Tests.PageObject
         private readonly IWebDriver driver;
         public StartPage(IWebDriver _driver)
         {
-            driver = _driver;
             LogHelper.log.Info("initialized : " + this.GetType().Name);
+            driver = _driver;
         }
         #region IWebElements
         private readonly By LoginBtn = By.CssSelector("div[role='button'] a[href='https://login.salesforce.com/']");
@@ -20,8 +20,8 @@ namespace UI_Tests.PageObject
         #region Actions
         public LoginPage GetLoginPage()
         {
-            driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
             LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
+            driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
             return new LoginPage(driver);
         }
         #endregion Actions 

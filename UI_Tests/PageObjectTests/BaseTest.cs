@@ -55,24 +55,18 @@ namespace UI_Tests.PageObject.Tests
         [TearDown]
         public void TearDown()
         {
-            if (TestContext.CurrentContext.Result.Outcome.Status.ToString().Equals("Passed"))
-            {
-            }
-            else if (TestContext.CurrentContext.Result.Outcome.Status.ToString().Equals("Failed"))
+            if (TestContext.CurrentContext.Result.Outcome.Status.ToString().Equals("Failed"))
             {
                 AllureLifecycle.Instance.AddAttachment($"Screenshot [{DateTime.Now:HH:mm:ss}]",
-                    "image/png", driver.TakeScreenshot().AsByteArray);
+                "image/png", driver.TakeScreenshot().AsByteArray);
             }
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            if (driver != null)
-            {
-                driver.Close();
-                driver.Quit();
-            }
+            driver?.Close();
+            driver?.Quit();
         }
     }
 }
