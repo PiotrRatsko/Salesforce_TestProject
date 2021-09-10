@@ -21,7 +21,11 @@ namespace UI_Tests.PageObject.Tests
         private static IWebDriver GetChromeDriver()
         {
             ChromeOptions options = new();
-            if (!string.IsNullOrEmpty(Config.ChromeOptions)) options.AddArguments(Config.ChromeOptions);
+            if (Config.ChromeOptions == "--headless")
+            {
+                options.AddArguments("--headless");
+                options.AddArguments("--window-size=1920,1080");
+            }
             return new ChromeDriver(options);
         }
 
