@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace UI_Tests.PageObject
 {
-    public class ContactsPage : BasePage
+    public class ContactsPage : BasePage<ContactsPage>, IPageWithUrl
     {
         public ContactsPage(IWebDriver _driver) : base(_driver)
         {
@@ -16,6 +16,7 @@ namespace UI_Tests.PageObject
         }
 
         #region IWebElements
+        public string PageUrl { get; set; } = "";
         //private readonly By LoginBtn = By.CssSelector("div[role='button'] a[href='https://login.salesforce.com/']");
         //private readonly By Shadow_Root = By.CssSelector("hgf-globalnavigation");
         #endregion IWebElements
