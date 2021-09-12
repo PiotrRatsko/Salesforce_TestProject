@@ -1,13 +1,22 @@
 ﻿using OpenQA.Selenium;
 using Selenium_TestFrameWork;
+using Selenium_TestFrameWork.Configuration;
 using Selenium_TestFrameWork.WebDriverExtention;
+using System;
 
 namespace UI_Tests.PageObject
 {
-    public class StartPage
+    public class StartPage : LoginPage<HomePage>, IPageLoader<StartPage>
     {
+        public StartPage LoadPageByUrl()
+        {
+            driver.NavigateToUrl(PageUrl);
+            return this;
+        }
         private readonly IWebDriver driver;
-        public StartPage(IWebDriver _driver)
+        public string PageUrl { get; set; } = Config.WebSite;
+
+        public StartPage(IWebDriver _driver):base (_driver)
         {
             LogHelper.log.Info("initialized : " + this.GetType().Name);
             driver = _driver;
@@ -18,11 +27,11 @@ namespace UI_Tests.PageObject
         #endregion IWebElements
 
         #region Actions
-        public LoginPage GetLoginPage()
+        public new HomePage LogIn(string userName = null, string password = null)
         {
             LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
             driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
-            return new LoginPage(driver);
+           return base.LogIn(userName, password);
         }
         #endregion Actions 
     }

@@ -1,7 +1,8 @@
 ﻿namespace UI_Tests.PageObject
 {
-    public interface IPageWithUrl
+    public interface IPageLoader<T>
     {
         public string PageUrl { get; set; }
+        public T LoadPageByUrl();
     }
 }

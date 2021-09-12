@@ -2,10 +2,11 @@
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.Configuration;
 using Selenium_TestFrameWork.WebDriverExtention;
+using System;
 
 namespace UI_Tests.PageObject
 {
-    public class LoginPage : IPageWithUrl
+    public abstract class LoginPage<T>
     {
         private readonly IWebDriver driver;
 
@@ -16,20 +17,13 @@ namespace UI_Tests.PageObject
         }
 
         #region IWebElements
-        public string PageUrl { get; set; } = "https://login.salesforce.com/";
         private readonly By UserNameTxtBox = By.Id("username"); //userName Address textbox
         private readonly By PasswordTxtBox = By.Id("password"); //Password textbox
         private readonly By LogInBtn = By.Id("Login"); //Log In button
         #endregion IWebElements
 
         #region Action
-        public LoginPage LoadPage()
-        {
-            driver.NavigateToUrl(PageUrl);
-            return this;
-        }
-
-        public LoginPage LogIn(string userName = null, string password = null)
+        public T LogIn(string userName = null, string password = null)
         {
             userName ??= Config.UserName;
             password ??= Config.Password;
@@ -37,7 +31,8 @@ namespace UI_Tests.PageObject
             driver.TypeInTextBox(UserNameTxtBox, userName);
             driver.TypeInTextBox(PasswordTxtBox, password);
             driver.ClickButton(LogInBtn);
-            return this;
+            T obj = (T)Activator.CreateInstance(typeof(T), driver);
+            return obj;
         }
         #endregion Action
     }

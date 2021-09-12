@@ -5,10 +5,17 @@ using System;
 
 namespace UI_Tests.PageObject
 {
-    public class BasePage<T> where T: IPageWithUrl
+    public abstract class BasePage<T> : LoginPage<T>, IPageLoader<T>
     {
+        public T LoadPageByUrl()
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), driver);
+            driver.NavigateToUrl(this.PageUrl);
+            return obj;
+        }
         protected IWebDriver driver;
-        public BasePage(IWebDriver _driver)
+        public abstract string PageUrl { get; set; }
+        public BasePage(IWebDriver _driver) : base(_driver)
         {
             LogHelper.log.Info("initialized : " + this.GetType().Name);
             driver = _driver;
@@ -18,33 +25,21 @@ namespace UI_Tests.PageObject
         #endregion IWebElements
 
         #region Actions
-        public T LoadPage()
-        {
-            T obj = (T)Activator.CreateInstance(typeof(T), driver);
-            driver.NavigateToUrl(obj.PageUrl);
-            return obj;
-        }
 
-        public T LogIn()
-        {
-            T obj = (T)Activator.CreateInstance(typeof(T), driver);
-            LoginPage lg = new LoginPage(driver).LogIn();
-            return obj;
-        }
 
-        public AccountsPage ClickAccountsBtn()
-        {
-            //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
-            //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
-            return new AccountsPage(driver);
-        }
+        //public AccountsPage ClickAccountsBtn()
+        //{
+        //    //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
+        //    //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
+        //    return new AccountsPage(driver);
+        //}
 
-        public ContactsPage ClickContactsBtn()
-        {
-            //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
-            //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
-            return new ContactsPage(driver);
-        }
+        //public ContactsPage ClickContactsBtn()
+        //{
+        //    //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
+        //    //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
+        //    return new ContactsPage(driver);
+        //}
         #endregion Actions
     }
 }

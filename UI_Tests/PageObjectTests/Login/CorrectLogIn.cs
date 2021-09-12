@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Selenium_TestFrameWork;
-using Selenium_TestFrameWork.Configuration;
 using System.Threading;
 using UI_Tests.PageObject;
 using UI_Tests.PageObject.Tests;
@@ -14,8 +13,8 @@ namespace UI_Tests.PageObjectTests.Login
         public void CorrectLogInTest()
         {
             LogHelper.log.Info("Starting Test: " + TestContext.CurrentContext.Test.Name);
-            //StartPage sp = new(driver);
-            new LoginPage(driver).LoadPage().LogIn();
+            HomePage sp = new StartPage(driver).LoadPageByUrl().LogIn();
+            Thread.Sleep(10000);
         }
     }
 }
