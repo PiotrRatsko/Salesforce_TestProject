@@ -13,7 +13,8 @@ namespace UI_Tests.PageObjectTests.Accounts
         public void CreateAccountTest()
         {
             LogHelper.log.Info("Starting Test: " + TestContext.CurrentContext.Test.Name);
-            BasePage ap = new AccountsPage(driver).LoadPageByUrl().LogIn();
+            AccountsPage ap = new AccountsPage(driver).LoadPageByUrl().LogIn() as AccountsPage;
+            ap.HH();
             Thread.Sleep(10000);
         }
     }
