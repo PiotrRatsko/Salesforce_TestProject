@@ -5,7 +5,7 @@ using Selenium_TestFrameWork.WebDriverExtention;
 
 namespace UI_Tests.PageObject
 {
-    public class LoginPage
+    class LoginPage
     {
         private readonly IWebDriver driver;
 

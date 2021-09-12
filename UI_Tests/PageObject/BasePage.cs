@@ -4,18 +4,18 @@ using Selenium_TestFrameWork.WebDriverExtention;
 
 namespace UI_Tests.PageObject
 {
-    public abstract class BasePage
+    abstract class BasePage<T> where T : BasePage<T>
     {
-        public BasePage LoadPageByUrl()
+        public T LoadPageByUrl()
         {
             driver.NavigateToUrl(this.PageUrl);
-            return this;
+            return this as T;
         }
 
-        public BasePage LogIn()
+        public T LogIn(string userName = null, string password = null)
         {
-            loginPage.LogIn();
-            return this;
+            loginPage.LogIn(userName, password);
+            return this as T;
         }
 
         private readonly IWebDriver driver;
@@ -32,19 +32,19 @@ namespace UI_Tests.PageObject
         #endregion IWebElements
 
         #region Actions
-        //public AccountsPage ClickAccountsBtn()
-        //{
-        //    //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
-        //    //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
-        //    return new AccountsPage(driver);
-        //}
+        public AccountsPage ClickAccountsBtn()
+        {
+            //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
+            //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
+            return this as AccountsPage;
+        }
 
-        //public ContactsPage ClickContactsBtn()
-        //{
-        //    //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
-        //    //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
-        //    return new ContactsPage(driver);
-        //}
+        public ContactsPage ClickContactsBtn()
+        {
+            //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
+            //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
+            return this as ContactsPage;
+        }
         #endregion Actions
     }
 }
