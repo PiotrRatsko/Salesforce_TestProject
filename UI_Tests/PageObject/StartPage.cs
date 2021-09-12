@@ -16,7 +16,7 @@ namespace UI_Tests.PageObject
         private readonly IWebDriver driver;
         public string PageUrl { get; set; } = Config.WebSite;
 
-        public StartPage(IWebDriver _driver):base (_driver)
+        public StartPage(IWebDriver _driver) : base(_driver)
         {
             LogHelper.log.Info("initialized : " + this.GetType().Name);
             driver = _driver;
@@ -31,7 +31,7 @@ namespace UI_Tests.PageObject
         {
             LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
             driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
-           return base.LogIn(userName, password);
+            return base.LogIn(userName, password);
         }
         #endregion Actions 
     }
