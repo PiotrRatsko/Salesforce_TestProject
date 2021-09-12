@@ -1,32 +1,37 @@
 ﻿using OpenQA.Selenium;
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.WebDriverExtention;
-using System;
 
 namespace UI_Tests.PageObject
 {
-    public abstract class BasePage<T> : LoginPage<T>, IPageLoader<T>
+    public abstract class BasePage
     {
-        public T LoadPageByUrl()
+        public BasePage LoadPageByUrl()
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), driver);
             driver.NavigateToUrl(this.PageUrl);
-            return obj;
+            return this;
         }
-        protected IWebDriver driver;
-        public abstract string PageUrl { get; set; }
-        public BasePage(IWebDriver _driver) : base(_driver)
+
+        public BasePage LogIn()
         {
-            LogHelper.log.Info("initialized : " + this.GetType().Name);
+            loginPage.LogIn();
+            return this;
+        }
+
+        private readonly IWebDriver driver;
+        private readonly LoginPage loginPage;
+        public abstract string PageUrl { get; set; }
+        public BasePage(IWebDriver _driver)
+        {
+            LogHelper.log.Info("initialized BasePage ctor: " + this.GetType().Name);
             driver = _driver;
+            loginPage = new LoginPage(_driver);
         }
 
         #region IWebElements
         #endregion IWebElements
 
         #region Actions
-
-
         //public AccountsPage ClickAccountsBtn()
         //{
         //    //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();

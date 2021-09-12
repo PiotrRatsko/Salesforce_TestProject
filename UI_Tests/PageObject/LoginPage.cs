@@ -2,11 +2,10 @@
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.Configuration;
 using Selenium_TestFrameWork.WebDriverExtention;
-using System;
 
 namespace UI_Tests.PageObject
 {
-    public abstract class LoginPage<T>
+    public class LoginPage
     {
         private readonly IWebDriver driver;
 
@@ -23,7 +22,7 @@ namespace UI_Tests.PageObject
         #endregion IWebElements
 
         #region Action
-        public T LogIn(string userName = null, string password = null)
+        public void LogIn(string userName = null, string password = null)
         {
             userName ??= Config.UserName;
             password ??= Config.Password;
@@ -31,8 +30,6 @@ namespace UI_Tests.PageObject
             driver.TypeInTextBox(UserNameTxtBox, userName);
             driver.TypeInTextBox(PasswordTxtBox, password);
             driver.ClickButton(LogInBtn);
-            T obj = (T)Activator.CreateInstance(typeof(T), driver);
-            return obj;
         }
         #endregion Action
     }
