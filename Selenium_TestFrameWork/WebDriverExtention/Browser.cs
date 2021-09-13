@@ -6,7 +6,7 @@ namespace Selenium_TestFrameWork.WebDriverExtention
     {
         public static void MaxBrowser(this IWebDriver driver)
         {
-            LogHelper.log.Info("MaxBrowser");
+            LogHelper.log.Info("Max browser");
             driver.Manage().Window.Maximize();
         }
 

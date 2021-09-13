@@ -15,7 +15,7 @@ namespace UI_Tests.PageObject
 
         public BasePage(IWebDriver _driver)
         {
-            LogHelper.log.Info("initialized BasePage ctor: " + this.GetType().Name);
+            LogHelper.log.Info("Initialized BasePage ctor: " + this.GetType().Name);
             driver = _driver;
             loginPage = new LoginPage(_driver);
         }

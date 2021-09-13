@@ -17,11 +17,11 @@ namespace UI_Tests.PageObject
 
         public LoginPage(IWebDriver _driver)
         {
-            LogHelper.log.Info("initialized : " + this.GetType().Name);
+            LogHelper.log.Info("Initialized : " + this.GetType().Name);
             driver = _driver;
         }
 
-        private bool IsLoginPage()
+        private bool IsOpened()
         {
             driver.WaitForTitle(pageTitle);
             return (pageTitle == driver.GetPageTitle());
@@ -30,7 +30,7 @@ namespace UI_Tests.PageObject
         #region Action
         public void LogIn(string userName = null, string password = null)
         {
-            if (IsLoginPage())
+            if (IsOpened())
             {
                 userName ??= Config.UserName;
                 password ??= Config.Password;

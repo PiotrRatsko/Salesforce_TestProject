@@ -10,7 +10,7 @@ namespace UI_Tests.PageObject
 
         public ContactsPage(IWebDriver _driver) : base(_driver)
         {
-            LogHelper.log.Info("initialized : " + this.GetType().Name);
+            LogHelper.log.Info("Initialized : " + this.GetType().Name);
         }
 
         override public string PageUrl { get; set; } = "https://itechart-c.lightning.force.com/lightning/o/Contact/list?filterName=Recent";

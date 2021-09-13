@@ -8,13 +8,13 @@ namespace Selenium_TestFrameWork.WebDriverExtention
         public static void TypeInTextBox(this IWebDriver driver, By locator, string inputText)
         {
             driver.ClearTextBox(locator);
-            LogHelper.log.Info("SendKeys: " + locator.ToString());
+            LogHelper.log.Info("Send keys: " + locator.ToString());
             element.SendKeys(inputText);
         }
 
         public static void ClearTextBox(this IWebDriver driver, By locator)
         {
-            LogHelper.log.Info("ClearTextBox: " + locator.ToString());
+            LogHelper.log.Info("Clear text box: " + locator.ToString());
             element = driver.GetElement(locator);
             element.Clear();
         }
