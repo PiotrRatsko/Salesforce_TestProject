@@ -4,32 +4,45 @@ using Selenium_TestFrameWork.WebDriverExtention;
 
 namespace UI_Tests.PageObject
 {
-    public class BasePage
+    abstract class BasePage<T> where T : BasePage<T>
     {
-        protected IWebDriver driver;
-        public BasePage(IWebDriver _driver)
-        {
-            LogHelper.log.Info("initialized : " + this.GetType().Name);
-            driver = _driver;
-        }
-
         #region IWebElements
-
         #endregion IWebElements
 
-        #region Actions
-        public AccountsPage GetAccountsPage()
+        private readonly IWebDriver driver;
+        private readonly LoginPage loginPage;
+
+        public BasePage(IWebDriver _driver)
         {
-            //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
-            //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
-            return new AccountsPage(driver);
+            LogHelper.log.Info("initialized BasePage ctor: " + this.GetType().Name);
+            driver = _driver;
+            loginPage = new LoginPage(_driver);
         }
 
-        public ContactsPage GetContactsPage()
+        public abstract string PageUrl { get; set; }
+
+        #region Actions
+        public T LoadPageByUrl()
         {
-            //driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
-            //LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
-            return new ContactsPage(driver);
+            driver.NavigateToUrl(this.PageUrl);
+            return this as T;
+        }
+
+        public T LogIn(string userName = null, string password = null)
+        {
+            loginPage.LogIn(userName, password);
+            return this as T;
+        }
+        
+        public AccountsPage ClickAccountsBtn()
+        {
+            //LogHelper.log.Info("ClickAccountsBtn: " + LoginBtn.ToString());
+            return this as AccountsPage;
+        }
+
+        public ContactsPage ClickContactsBtn()
+        {
+            return this as ContactsPage;
         }
         #endregion Actions
     }

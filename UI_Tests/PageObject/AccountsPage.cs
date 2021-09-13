@@ -1,24 +1,19 @@
 ﻿using OpenQA.Selenium;
 using Selenium_TestFrameWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UI_Tests.PageObject
 {
-    public class AccountsPage : BasePage
+    class AccountsPage : BasePage<AccountsPage>
     {
+        #region IWebElements
+        #endregion IWebElements
+
         public AccountsPage(IWebDriver _driver) : base(_driver)
         {
             LogHelper.log.Info("initialized : " + this.GetType().Name);
         }
 
-        #region IWebElements
-        //private readonly By LoginBtn = By.CssSelector("div[role='button'] a[href='https://login.salesforce.com/']");
-        //private readonly By Shadow_Root = By.CssSelector("hgf-globalnavigation");
-        #endregion IWebElements
+        override public string PageUrl { get; set; } = "https://itechart-c.lightning.force.com/lightning/o/Account/list?filterName=Recent";
 
         #region Actions
 
