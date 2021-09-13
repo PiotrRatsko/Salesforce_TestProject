@@ -14,9 +14,9 @@ namespace UI_Tests.PageObject
         }
 
         override public string PageUrl { get; set; } = "https://itechart-c.lightning.force.com/lightning/o/Account/list?filterName=Recent";
+        override public string PageTitle { get; set; } = "Recently Viewed | Accounts | Salesforce";
 
         #region Actions
-
         #endregion Actions 
     }
 }

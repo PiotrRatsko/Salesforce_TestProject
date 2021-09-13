@@ -30,9 +30,9 @@ namespace UI_Tests.PageObject
             return this;
         }
 
-        public HomePage LogIn(string userName = null, string password = null)
+        public HomePage ClickLoginBtnAndLogIn(string userName = null, string password = null)
         {
-            LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
+            LogHelper.log.Info("ClickLoginBtn: " + LoginBtn.ToString());
             driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
             loginPage.LogIn(userName, password);
             return new HomePage(driver);

@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using Selenium_TestFrameWork;
+using Selenium_TestFrameWork.CustomException;
 using Selenium_TestFrameWork.WebDriverExtention;
 
 namespace UI_Tests.PageObject
@@ -20,8 +21,17 @@ namespace UI_Tests.PageObject
         }
 
         public abstract string PageUrl { get; set; }
+        public abstract string PageTitle { get; set; }
 
         #region Actions
+        public T CheckPageTilte()
+        {
+            driver.WaitForTitle(PageTitle);
+            var title = driver.GetPageTitle();
+            if (PageTitle == title) return this as T;
+            else throw new PageTitleNotCorrect($"Page {this.GetType().Name} has wrong title: \"{title}\". Expected title: \"{PageTitle}\"");
+        }
+
         public T LoadPageByUrl()
         {
             driver.NavigateToUrl(this.PageUrl);
@@ -33,7 +43,7 @@ namespace UI_Tests.PageObject
             loginPage.LogIn(userName, password);
             return this as T;
         }
-        
+
         public AccountsPage ClickAccountsBtn()
         {
             //LogHelper.log.Info("ClickAccountsBtn: " + LoginBtn.ToString());

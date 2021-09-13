@@ -12,6 +12,7 @@ namespace UI_Tests.PageObject
         private readonly By PasswordTxtBox = By.Id("password"); //Password textbox
         private readonly By LogInBtn = By.Id("Login"); //Log In button
         #endregion IWebElements
+        private readonly string pageTitle = "Login | Salesforce";
         private readonly IWebDriver driver;
 
         public LoginPage(IWebDriver _driver)
@@ -20,15 +21,24 @@ namespace UI_Tests.PageObject
             driver = _driver;
         }
 
+        private bool IsLoginPage()
+        {
+            driver.WaitForTitle(pageTitle);
+            return (pageTitle == driver.GetPageTitle());
+        }
+
         #region Action
         public void LogIn(string userName = null, string password = null)
         {
-            userName ??= Config.UserName;
-            password ??= Config.Password;
-            LogHelper.log.Info("Making LogIn:");
-            driver.TypeInTextBox(UserNameTxtBox, userName);
-            driver.TypeInTextBox(PasswordTxtBox, password);
-            driver.ClickButton(LogInBtn);
+            if (IsLoginPage())
+            {
+                userName ??= Config.UserName;
+                password ??= Config.Password;
+                LogHelper.log.Info("Making LogIn:");
+                driver.TypeInTextBox(UserNameTxtBox, userName);
+                driver.TypeInTextBox(PasswordTxtBox, password);
+                driver.ClickButton(LogInBtn);
+            }
         }
         #endregion Action
     }

@@ -10,11 +10,11 @@ namespace Selenium_TestFrameWork.WebDriverExtention
     {
         public static string GetPageTitle(this IWebDriver driver)
         {
-            driver.Manage().Timeouts().ImplicitWait = (TimeSpan.FromSeconds(1));
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            WebDriverWait wait = new(driver, TimeSpan.FromSeconds(30));
             wait.PollingInterval = TimeSpan.FromMilliseconds(250);
-            wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(ElementNotVisibleException));
-            wait.Until(ExpectedConditions.ElementExists(By.XPath("/html/head/title[1]")));
+            wait.IgnoreExceptionTypes(typeof(Exception));
+            wait.Until(x => x.IsElementPresent(By.XPath("/html/head/title[1]")));
+            LogHelper.log.Info("Got page title: " + driver.Title);
             return driver.Title;
         }
 
@@ -22,7 +22,7 @@ namespace Selenium_TestFrameWork.WebDriverExtention
         public static void SwitchToWindow(this IWebDriver driver, int index = 0)
         {
             ReadOnlyCollection<string> windows = driver.WindowHandles;
-            if(windows.Count < index)
+            if (windows.Count < index)
             {
                 throw new NoSuchWindowException("Invalid Browser Window Index " + index);
             }
@@ -35,7 +35,7 @@ namespace Selenium_TestFrameWork.WebDriverExtention
         public static void SwitchToParent(this IWebDriver driver)
         {
             var windowsids = driver.WindowHandles;
-            for(int i=windowsids.Count-1; i>0; i--)
+            for (int i = windowsids.Count - 1; i > 0; i--)
             {
                 driver.SwitchTo().Window(windowsids[i]);
                 driver.Close();

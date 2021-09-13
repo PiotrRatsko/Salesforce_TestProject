@@ -12,7 +12,7 @@ namespace UI_Tests.PageObjectTests.Login
         public void CorrectLogInTest()
         {
             LogHelper.log.Info("Starting Test: " + TestContext.CurrentContext.Test.Name);
-            HomePage sp = new StartPage(driver).LoadPageByUrl().LogIn();
+            HomePage sp = new StartPage(driver).LoadPageByUrl().ClickLoginBtnAndLogIn();
         }
     }
 }
