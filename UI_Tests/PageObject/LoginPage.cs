@@ -7,6 +7,11 @@ namespace UI_Tests.PageObject
 {
     class LoginPage
     {
+        #region IWebElements
+        private readonly By UserNameTxtBox = By.Id("username"); //userName Address textbox
+        private readonly By PasswordTxtBox = By.Id("password"); //Password textbox
+        private readonly By LogInBtn = By.Id("Login"); //Log In button
+        #endregion IWebElements
         private readonly IWebDriver driver;
 
         public LoginPage(IWebDriver _driver)
@@ -14,12 +19,6 @@ namespace UI_Tests.PageObject
             LogHelper.log.Info("initialized : " + this.GetType().Name);
             driver = _driver;
         }
-
-        #region IWebElements
-        private readonly By UserNameTxtBox = By.Id("username"); //userName Address textbox
-        private readonly By PasswordTxtBox = By.Id("password"); //Password textbox
-        private readonly By LogInBtn = By.Id("Login"); //Log In button
-        #endregion IWebElements
 
         #region Action
         public void LogIn(string userName = null, string password = null)

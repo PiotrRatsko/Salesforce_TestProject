@@ -7,14 +7,12 @@ namespace UI_Tests.PageObject
 {
     class StartPage
     {
-        public StartPage LoadPageByUrl()
-        {
-            driver.NavigateToUrl(PageUrl);
-            return this;
-        }
+        #region IWebElements
+        private readonly By LoginBtn = By.CssSelector("div[role='button'] a[href='https://login.salesforce.com/']");
+        private readonly By Shadow_Root = By.CssSelector("hgf-globalnavigation");
+        #endregion IWebElements
         private readonly IWebDriver driver;
         private readonly LoginPage loginPage;
-        public string PageUrl { get; set; } = Config.WebSite;
 
         public StartPage(IWebDriver _driver)
         {
@@ -22,13 +20,17 @@ namespace UI_Tests.PageObject
             driver = _driver;
             loginPage = new LoginPage(_driver);
         }
-        #region IWebElements
-        private readonly By LoginBtn = By.CssSelector("div[role='button'] a[href='https://login.salesforce.com/']");
-        private readonly By Shadow_Root = By.CssSelector("hgf-globalnavigation");
-        #endregion IWebElements
+       
+        public string PageUrl { get; set; } = Config.WebSite;
 
         #region Actions
-         public HomePage LogIn(string userName = null, string password = null)
+        public StartPage LoadPageByUrl()
+        {
+            driver.NavigateToUrl(PageUrl);
+            return this;
+        }
+
+        public HomePage LogIn(string userName = null, string password = null)
         {
             LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
             driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
