@@ -2,9 +2,9 @@
 
 namespace Selenium_TestFrameWork.CustomException
 {
-    public class NoSuitableDriverFound: Exception
+    public class PageTitleNotCorrect: Exception
     {
-        public NoSuitableDriverFound(string msg): base(msg)
+        public PageTitleNotCorrect(string msg): base(msg)
         {
             LogHelper.log.Error(msg);
         }

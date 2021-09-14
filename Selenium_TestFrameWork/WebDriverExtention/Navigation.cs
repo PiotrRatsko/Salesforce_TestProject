@@ -6,7 +6,7 @@ namespace Selenium_TestFrameWork.WebDriverExtention
     {
         public static void NavigateToUrl(this IWebDriver driver, string url)
         {
-            LogHelper.log.Info("NavigateToUrl: " + url);
+            LogHelper.log.Info("Navigate to Url: " + url);
             driver.Navigate().GoToUrl(url);
         }
     }

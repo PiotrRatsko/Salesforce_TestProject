@@ -16,7 +16,7 @@ namespace Selenium_TestFrameWork.WebDriverExtention
             //WaitHelper.WaitForElement(locator);
             element = driver.GetElement(locator);
             element.Click();
-            LogHelper.log.Info("ClickButton: " + locator.ToString());
+            LogHelper.log.Info("Click button: " + locator.ToString());
         }
 
         public static void ClickButton(this IWebElement element)

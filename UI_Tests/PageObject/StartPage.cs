@@ -16,7 +16,7 @@ namespace UI_Tests.PageObject
 
         public StartPage(IWebDriver _driver)
         {
-            LogHelper.log.Info("initialized : " + this.GetType().Name);
+            LogHelper.log.Info("Initialized : " + this.GetType().Name);
             driver = _driver;
             loginPage = new LoginPage(_driver);
         }
@@ -30,9 +30,9 @@ namespace UI_Tests.PageObject
             return this;
         }
 
-        public HomePage LogIn(string userName = null, string password = null)
+        public HomePage ClickLoginBtnAndLogIn(string userName = null, string password = null)
         {
-            LogHelper.log.Info("ClickButton: " + LoginBtn.ToString());
+            LogHelper.log.Info("Click login Btn: " + LoginBtn.ToString());
             driver.GetShadowRoot(Shadow_Root).GetElement(LoginBtn).ClickButton();
             loginPage.LogIn(userName, password);
             return new HomePage(driver);
