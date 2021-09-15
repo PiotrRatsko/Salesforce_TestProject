@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
 using OpenQA.Selenium.Support.UI;
 using System;
 
@@ -12,46 +13,40 @@ namespace Selenium_TestFrameWork.WebDriverExtention
             try
             {
                 LogHelper.log.Info("Watting page title: " + title);
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(totalSeconds));
+                WebDriverWait wait = new(driver, TimeSpan.FromSeconds(totalSeconds));
                 wait.PollingInterval = TimeSpan.FromMilliseconds(checkInterval);
                 wait.Until(x => x.Title.Contains(title));
             }
             catch
             {
                 LogHelper.log.Error("Did not manage title: " + title);
+                throw new Exception("Did not manage title: " + title);
             }
         }
 
-        // Once the element is visible, return that element
-        //public static IWebElement WaitForElement(By locator, int totalSeconds, int checkInterval)
-        //{
-        //    ObjectRepository.Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
-        //    WebDriverWait wait = new WebDriverWait(ObjectRepository.Driver, TimeSpan.FromSeconds(totalSeconds));
-        //    wait.PollingInterval = TimeSpan.FromMilliseconds(checkInterval);
-        //    wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(ElementNotVisibleException));
-        //    wait.Until(ExpectedConditions.ElementIsVisible(locator));
-        //    IWebElement element = GenericHelper.GetElement(locator);
-        //    return element;
-        //}
-
-        //// Use this wait for Auto Suggest List and get all the list
-        //public static IList<IWebElement> WaitForAutoSuggestList(By locator, int totalSeconds, int checkInterval)
-        //{
-        //    ObjectRepository.Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
-        //    WebDriverWait wait = new WebDriverWait(ObjectRepository.Driver, TimeSpan.FromSeconds(totalSeconds))
-        //    {
-        //        PollingInterval = TimeSpan.FromMilliseconds(checkInterval),
-        //    };
-        //    wait.Until(ExpectedConditions.ElementIsVisible(locator));
-        //    return wait.Until(GetAllElements(locator));
-        //}
-
-        //private static Func<IWebDriver, IList<IWebElement>> GetAllElements(By locator)
-        //{
-        //    return ((x) =>
-        //    {
-        //        return x.FindElements(locator);
-        //    });
-        //}
+        // Use this wait for Web element or elements
+        public static void WaitForElements<T>(this T type, By locator, int totalSeconds, int checkInterval = 250)
+        {
+            try
+            {
+                WebDriverWait wait;
+                LogHelper.log.Info("Waitting for webelement: " + locator.ToString());
+                if (type.GetType().Name == "RemoteWebElement")
+                {
+                    wait = new(((IWrapsDriver)type).WrappedDriver, TimeSpan.FromSeconds(totalSeconds));
+                    wait.PollingInterval = TimeSpan.FromMilliseconds(checkInterval);
+                    wait.Until(x => (type as IWebElement).FindElements(locator).Count > 0);
+                    return;
+                }
+                wait = new(type as IWebDriver, TimeSpan.FromSeconds(totalSeconds));
+                wait.PollingInterval = TimeSpan.FromMilliseconds(checkInterval);
+                wait.Until(x => x.FindElements(locator).Count > 0);
+            }
+            catch
+            {
+                LogHelper.log.Error("Did not find webelement: " + locator.ToString());
+                throw new Exception("Did not find webelement: " + locator.ToString());
+            }
+        }
     }
 }
