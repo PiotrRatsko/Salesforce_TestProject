@@ -10,7 +10,7 @@ namespace UI_Tests.PageObject
         #region IWebElements
         #endregion IWebElements
 
-        private readonly IWebDriver driver;
+        protected readonly IWebDriver driver;
         private readonly LoginPage loginPage;
 
         public BasePage(IWebDriver _driver)
@@ -26,10 +26,15 @@ namespace UI_Tests.PageObject
         #region Actions
         public T CheckPageTilte()
         {
-            driver.WaitForTitle(PageTitle);
-            var title = driver.GetPageTitle();
-            if (PageTitle == title) return this as T;
-            else throw new PageTitleNotCorrect($"Page {this.GetType().Name} has wrong title: \"{title}\". Expected title: \"{PageTitle}\"");
+            try
+            {
+                driver.WaitForTitle(PageTitle);
+                return this as T;
+            }
+            catch
+            {
+                throw new PageTitleNotCorrect($"Page {this.GetType().Name} has wrong title: \"{driver.GetPageTitle()}\". Expected title: \"{PageTitle}\"");
+            }
         }
 
         public T LoadPageByUrl()
@@ -38,22 +43,30 @@ namespace UI_Tests.PageObject
             return this as T;
         }
 
-        public T LogIn(string userName = null, string password = null)
+        public T LogInIfNeed(string userName = null, string password = null)
         {
-            loginPage.LogIn(userName, password);
+            if (driver.GetPageTitle() == loginPage.pageTitle)
+            {
+                loginPage.LogIn(userName, password);
+            }
             return this as T;
         }
 
-        public AccountsPage ClickAccountsBtn()
+        public T GetPageDirectly()
         {
-            //LogHelper.log.Info("ClickAccountsBtn: " + LoginBtn.ToString());
-            return this as AccountsPage;
+            LoadPageByUrl().LogInIfNeed().CheckPageTilte();
+            return this as T;
         }
 
-        public ContactsPage ClickContactsBtn()
-        {
-            return this as ContactsPage;
-        }
+        //public AccountsPage ClickAccountsBtn()
+        //{
+        //    return this as AccountsPage;
+        //}
+
+        //public ContactsPage ClickContactsBtn()
+        //{
+        //    return this as ContactsPage;
+        //}
         #endregion Actions
     }
 }

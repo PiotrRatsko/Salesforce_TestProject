@@ -13,7 +13,7 @@ namespace Selenium_TestFrameWork.WebDriverExtention
             WebDriverWait wait = new(driver, TimeSpan.FromSeconds(30));
             wait.PollingInterval = TimeSpan.FromMilliseconds(250);
             wait.IgnoreExceptionTypes(typeof(Exception));
-            wait.Until(x => x.IsElementPresent(By.XPath("/html/head/title[1]")));
+            wait.Until(x => x.FindElement(By.XPath("/html/head/title[1]")));
             LogHelper.log.Info("Got page title: " + driver.Title);
             return driver.Title;
         }

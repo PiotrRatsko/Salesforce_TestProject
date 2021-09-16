@@ -1,26 +1,26 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Internal;
+using System.Drawing;
+using System.Threading;
 
 namespace Selenium_TestFrameWork.WebDriverExtention
 {
     public static class Button
     {
         private static IWebElement element;
-        public static bool IsButtonEnabled(this IWebDriver driver, By locator)
-        {
-            element = driver.GetElement(locator);
-            return element.Enabled;
-        }
 
         public static void ClickButton(this IWebDriver driver, By locator)
         {
-            //WaitHelper.WaitForElement(locator);
-            element = driver.GetElement(locator);
-            element.Click();
             LogHelper.log.Info("Click button: " + locator.ToString());
+            Thread.Sleep(1000);
+            IWebElement element = driver.GetElement(locator);
+            element.Click();
         }
 
         public static void ClickButton(this IWebElement element)
         {
+            LogHelper.log.Info("Click button: " + element);
             element.Click();
         }
 

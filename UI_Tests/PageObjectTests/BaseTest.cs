@@ -42,7 +42,6 @@ namespace UI_Tests.PageObject.Tests
                 _ => throw new NoSuitableDriverFound("Driver Not Found: {0}" + Config.BrowserType.ToString()),
             };
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Config.PageLoadTimeout);
-            //driver.NavigateToUrl(Config.WebSite);
             driver.MaxBrowser();
         }
 
