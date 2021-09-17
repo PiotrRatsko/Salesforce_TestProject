@@ -25,14 +25,13 @@ namespace UI_Tests.PageObject
         public string PageTitle { get; set; } = "New Account | Salesforce";
 
         #region Actions
-        public AccountsPage FillAndSaveNewAccount(Account account)
+        public void FillAndSaveNewAccount(Account account)
         {
             driver.WaitForTitle(PageTitle);
             driver.TypeInTextBox(AccountName, account.AccountName);
             SelectElementFromMenu(TypeBtn, Type, account.Type);
             driver.TypeInTextBox(Description, account.Description);
             driver.ClickButton(SaveBtn);
-            return new AccountsPage(driver);
         }
 
         private void SelectElementFromMenu(By menuLocator, string XPathElementLocator, string elementToAdd)
