@@ -7,11 +7,13 @@ namespace UI_Tests.PageObject
 {
     abstract class BasePage<T> where T : BasePage<T>
     {
-        #region IWebElements
-        #endregion IWebElements
-
         protected readonly IWebDriver driver;
         private readonly LoginPage loginPage;
+
+        #region IWebElements
+        protected readonly By AccountsBtn = By.XPath("//a[@title='Accounts']/.."); //accounts button
+        protected readonly By ContactsBtn = By.XPath("//a[@title='Contacts']/.."); //contacts button
+        #endregion IWebElements
 
         public BasePage(IWebDriver _driver)
         {
@@ -58,15 +60,21 @@ namespace UI_Tests.PageObject
             return this as T;
         }
 
-        //public AccountsPage ClickAccountsBtn()
-        //{
-        //    return this as AccountsPage;
-        //}
+        public AccountsPage ClickAccountsBtn()
+        {
+            LogHelper.log.Info("Click accounts btn");
+            driver.ClickButton(AccountsBtn);
+            driver.WaitForTitle(PageTitle);
+            return this as AccountsPage;
+        }
 
-        //public ContactsPage ClickContactsBtn()
-        //{
-        //    return this as ContactsPage;
-        //}
+        public ContactsPage ClickContactsBtn()
+        {
+            LogHelper.log.Info("Click contacts btn");
+            driver.ClickButton(ContactsBtn);
+            driver.WaitForTitle(PageTitle);
+            return this as ContactsPage;
+        }
         #endregion Actions
     }
 }
