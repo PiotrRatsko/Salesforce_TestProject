@@ -3,9 +3,9 @@ using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.WebDriverExtention;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using UI_Tests.Entities;
+using Tests.Entities;
 
-namespace UI_Tests.PageObject
+namespace Tests.PageObject
 {
     class AccountsPage : BasePage<AccountsPage>
     {
@@ -18,7 +18,7 @@ namespace UI_Tests.PageObject
 
         public AccountsPage(IWebDriver _driver) : base(_driver)
         {
-            LogHelper.log.Info("Initialized : " + this.GetType().Name);
+            LogHelper.log.Info("Initialized : " + GetType().Name);
         }
 
         override public string PageUrl { get; set; } = "https://itechart-c.lightning.force.com/lightning/o/Account/list?filterName=Recent";

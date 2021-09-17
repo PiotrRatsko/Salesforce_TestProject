@@ -1,9 +1,9 @@
 ﻿using OpenQA.Selenium;
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.WebDriverExtention;
-using UI_Tests.Entities;
+using Tests.Entities;
 
-namespace UI_Tests.PageObject
+namespace Tests.PageObject
 {
     class NewAccountPage
     {
@@ -18,7 +18,7 @@ namespace UI_Tests.PageObject
 
         public NewAccountPage(IWebDriver _driver)
         {
-            LogHelper.log.Info("Initialized : " + this.GetType().Name);
+            LogHelper.log.Info("Initialized : " + GetType().Name);
             driver = _driver;
         }
 

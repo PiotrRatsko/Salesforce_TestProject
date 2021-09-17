@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UI_Tests.Entities
+namespace Tests.Entities
 {
     class Account
     {
