@@ -3,7 +3,7 @@ using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.CustomException;
 using Selenium_TestFrameWork.WebDriverExtention;
 
-namespace UI_Tests.PageObject
+namespace Tests.PageObject
 {
     abstract class BasePage<T> where T : BasePage<T>
     {
@@ -17,7 +17,7 @@ namespace UI_Tests.PageObject
 
         public BasePage(IWebDriver _driver)
         {
-            LogHelper.log.Info("Initialized BasePage ctor: " + this.GetType().Name);
+            LogHelper.log.Info("Initialized BasePage ctor: " + GetType().Name);
             driver = _driver;
             loginPage = new LoginPage(_driver);
         }
@@ -35,13 +35,13 @@ namespace UI_Tests.PageObject
             }
             catch
             {
-                throw new PageTitleNotCorrect($"Page {this.GetType().Name} has wrong title: \"{driver.GetPageTitle()}\". Expected title: \"{PageTitle}\"");
+                throw new PageTitleNotCorrect($"Page {GetType().Name} has wrong title: \"{driver.GetPageTitle()}\". Expected title: \"{PageTitle}\"");
             }
         }
 
         public T LoadPageByUrl()
         {
-            driver.NavigateToUrl(this.PageUrl);
+            driver.NavigateToUrl(PageUrl);
             return this as T;
         }
 

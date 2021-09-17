@@ -11,7 +11,7 @@ using NUnit.Allure.Core;
 using Allure.Commons;
 using OpenQA.Selenium.Support.Extensions;
 
-namespace UI_Tests.PageObject.Tests
+namespace Tests.PageObjectTests
 {
     [AllureNUnit]
     [Parallelizable(scope: ParallelScope.Fixtures)]

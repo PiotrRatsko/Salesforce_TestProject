@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI_Tests", "UI_Tests\UI_Tests.csproj", "{11989311-2B1A-43BF-92DD-5122131802C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "UI_Tests\Tests.csproj", "{11989311-2B1A-43BF-92DD-5122131802C8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium_TestFrameWork", "Selenium_TestFrameWork\Selenium_TestFrameWork.csproj", "{4F2C3E9C-5FA5-42E6-A788-CB54DE989D51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_TestFrameWork", "API_TestFrameWork\API_TestFrameWork.csproj", "{A6DD55C2-DB3F-4240-AE48-B8ACD56C4D19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API_TestFrameWork", "API_TestFrameWork\API_TestFrameWork.csproj", "{A6DD55C2-DB3F-4240-AE48-B8ACD56C4D19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

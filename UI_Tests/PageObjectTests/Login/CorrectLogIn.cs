@@ -1,9 +1,7 @@
 ﻿using NUnit.Framework;
-using Selenium_TestFrameWork;
-using UI_Tests.PageObject;
-using UI_Tests.PageObject.Tests;
+using Tests.PageObject;
 
-namespace UI_Tests.PageObjectTests.Login
+namespace Tests.PageObjectTests.Login
 {
     public class CorrectLogIn : BaseTest
     {

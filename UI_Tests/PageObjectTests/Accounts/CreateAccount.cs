@@ -1,10 +1,9 @@
 ﻿using NUnit.Framework;
 using FluentAssertions;
-using UI_Tests.Entities;
-using UI_Tests.PageObject;
-using UI_Tests.PageObject.Tests;
+using Tests.PageObject;
+using Tests.Entities;
 
-namespace UI_Tests.PageObjectTests.Accounts
+namespace Tests.PageObjectTests.Accounts
 {
     public class CreateAccount : BaseTest
     {

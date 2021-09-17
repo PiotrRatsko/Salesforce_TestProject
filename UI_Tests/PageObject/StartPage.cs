@@ -3,7 +3,7 @@ using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.Configuration;
 using Selenium_TestFrameWork.WebDriverExtention;
 
-namespace UI_Tests.PageObject
+namespace Tests.PageObject
 {
     class StartPage
     {
@@ -16,11 +16,11 @@ namespace UI_Tests.PageObject
 
         public StartPage(IWebDriver _driver)
         {
-            LogHelper.log.Info("Initialized : " + this.GetType().Name);
+            LogHelper.log.Info("Initialized : " + GetType().Name);
             driver = _driver;
             loginPage = new LoginPage(_driver);
         }
-       
+
         public string PageUrl { get; set; } = Config.WebSite;
 
         #region Actions
