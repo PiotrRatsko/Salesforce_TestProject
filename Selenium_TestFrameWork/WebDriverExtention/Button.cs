@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Internal;
-using System.Drawing;
+using OpenQA.Selenium.Support.Extensions;
 using System.Threading;
 
 namespace Selenium_TestFrameWork.WebDriverExtention
@@ -12,16 +11,16 @@ namespace Selenium_TestFrameWork.WebDriverExtention
 
         public static void ClickButton(this IWebDriver driver, By locator)
         {
-            LogHelper.log.Info("Click button: " + locator.ToString());
             Thread.Sleep(1000);
             IWebElement element = driver.GetElement(locator);
-            element.Click();
+            driver.ExecuteJavaScript("arguments[0].click();", element);
+            LogHelper.log.Info("Click button: " + locator.ToString());
         }
 
         public static void ClickButton(this IWebElement element)
         {
+            ((IWrapsDriver)element).WrappedDriver.ExecuteJavaScript("arguments[0].click();", element);
             LogHelper.log.Info("Click button: " + element);
-            element.Click();
         }
 
         public static string GetButtonText(this IWebDriver driver, By locator)

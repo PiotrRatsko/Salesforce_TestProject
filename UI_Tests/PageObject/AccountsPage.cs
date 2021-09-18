@@ -1,7 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using Newtonsoft.Json;
+using OpenQA.Selenium;
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.WebDriverExtention;
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Tests.Entities;
 
@@ -11,8 +11,8 @@ namespace Tests.PageObject
     {
         #region IWebElements
         private readonly By NewAccountBtn = By.CssSelector("a[class='forceActionLink'][title='New']"); //new account button
-        private readonly By AccountDetailsBtn = By.XPath("//li[@title='Details']");
-        private readonly string AccountDetailsField = "//div[@class='slds-form']//span[text()='{0}']/../following-sibling::div//lightning-formatted-text";
+        private readonly By AccountDetailsBtn = By.XPath("//div[contains(@class, 'windowViewMode-normal oneContent active')]//li[@title='Details']");
+        private readonly string AccountDetailsField = "//div[@class='slds-form']//span[contains(text(),'{0}')]/../following-sibling::div//lightning-formatted-text";
         private readonly string AccountNameLink = "(//a[@title='{0}'])[1]"; //find account by account name
         #endregion IWebElements
 
@@ -21,7 +21,7 @@ namespace Tests.PageObject
             LogHelper.log.Info("Initialized : " + GetType().Name);
         }
 
-        override public string PageUrl { get; set; } = "https://itechart-c.lightning.force.com/lightning/o/Account/list?filterName=Recent";
+        override public string PageUrl { get; set; } = "https://mycompany-63e-dev-ed.lightning.force.com/lightning/o/Account/list?filterName=Recent";
         override public string PageTitle { get; set; } = "Recently Viewed | Accounts | Salesforce";
 
         #region Actions
@@ -43,15 +43,13 @@ namespace Tests.PageObject
             LogHelper.log.Info("Getting account by accountName");
             driver.WaitForTitle(PageTitle);
             var formatedXPath = string.Format(AccountNameLink, accountName);
-            driver.GetElement(By.XPath(formatedXPath)).Click();
+            driver.ClickButton(By.XPath(formatedXPath));
             driver.WaitForTitle($"{accountName} | Salesforce");
             driver.ClickButton(AccountDetailsBtn);
             Account account = new();
             foreach (var piInstance in account.GetType().GetProperties())
             {
-                string propName = piInstance.GetCustomAttribute<DisplayAttribute>()?.Name;
-                propName ??= piInstance.Name;
-                formatedXPath = string.Format(AccountDetailsField, propName);
+                formatedXPath = string.Format(AccountDetailsField, piInstance.Name);
                 piInstance.SetValue(account, driver.GetElement(By.XPath(formatedXPath)).Text);
             }
             return account;

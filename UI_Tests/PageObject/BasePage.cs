@@ -11,8 +11,8 @@ namespace Tests.PageObject
         private readonly LoginPage loginPage;
 
         #region IWebElements
-        protected readonly By AccountsBtn = By.XPath("//a[@title='Accounts']/.."); //accounts button
-        protected readonly By ContactsBtn = By.XPath("//a[@title='Contacts']/.."); //contacts button
+        protected readonly By AccountsBtn = By.XPath("//a[@title='Accounts']"); //accounts button
+        protected readonly By ContactsBtn = By.XPath("//a[@title='Contacts']"); //contacts button
         #endregion IWebElements
 
         public BasePage(IWebDriver _driver)
@@ -62,7 +62,6 @@ namespace Tests.PageObject
 
         public AccountsPage ClickAccountsBtn()
         {
-            LogHelper.log.Info("Click accounts btn");
             driver.ClickButton(AccountsBtn);
             driver.WaitForTitle(PageTitle);
             return this as AccountsPage;
@@ -70,7 +69,6 @@ namespace Tests.PageObject
 
         public ContactsPage ClickContactsBtn()
         {
-            LogHelper.log.Info("Click contacts btn");
             driver.ClickButton(ContactsBtn);
             driver.WaitForTitle(PageTitle);
             return this as ContactsPage;

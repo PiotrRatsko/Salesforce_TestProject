@@ -7,10 +7,10 @@ namespace Tests.PageObjectTests.Accounts
 {
     public class CreateAccount : BaseTest
     {
-        readonly Account account = new() { AccountName = "Test Account", Description = "Test Description", Type = "Customer" };
+        readonly Account account = new() { Name = "Test Account", Description = "Test Description", Type = "Customer - Direct" };
 
         [Test]
-        [Retry(2)]
+        [Retry(1)]
         public void CreateAccountTest()
         {
             account.Validate();
