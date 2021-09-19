@@ -13,7 +13,7 @@ namespace Tests.PageObject
             LogHelper.log.Info("Initialized : " + GetType().Name);
         }
 
-        override public string PageUrl { get; set; } = "https://itechart-c.lightning.force.com/lightning/o/Contact/list?filterName=Recent";
+        override public string PageUrl { get; set; } = "https://mycompany-63e-dev-ed.lightning.force.com/lightning/o/Contact/list?filterName=Recent";
         override public string PageTitle { get; set; } = "Recently Viewed | Contacts | Salesforce";
 
         #region Actions

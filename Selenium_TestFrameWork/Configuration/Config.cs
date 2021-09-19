@@ -19,10 +19,13 @@ namespace Selenium_TestFrameWork.Configuration
             ChromeOptions = config["ChromeOptions"];
             UserName = config["UserName"];
             Password = config["Password"];
-            WebSite = config["WebSite"];
             ScreenshotStorage = config["ScreenshotStorage"];
             PageLoadTimeout = int.Parse(config["PageLoadTimeout"]);
             ElementLoadTimeout = int.Parse(config["ElementLoadTimeout"]);
+            LoginEndpoint = config["LoginEndpoint"];
+            ApiBaseUrl = config["ApiBaseUrl"];
+            ClientId = config["ClientId"];
+            ClientSecret = config["ClientSecret"];
         }
 
         public static void WriteConfig2Console()
@@ -30,7 +33,7 @@ namespace Selenium_TestFrameWork.Configuration
             LogHelper.log.Info("Test Configuration:");
             PropertyInfo[] propertiesInfo = typeof(Config).GetProperties();
 
-            foreach (var item in propertiesInfo.Where(i => i.Name != "Password"))
+            foreach (var item in propertiesInfo.Where(i => i.Name != "Password" && i.Name != "ClientId" && i.Name != "ClientSecret"))
             {
                 LogHelper.log.Info(item.Name + ": " + item.GetValue(item));
             }
@@ -43,5 +46,9 @@ namespace Selenium_TestFrameWork.Configuration
         public static string ScreenshotStorage { get; }
         public static int PageLoadTimeout { get; }
         public static int ElementLoadTimeout { get; }
+        public static string LoginEndpoint { get; }
+        public static string ApiBaseUrl { get; }
+        public static string ClientId { get; }
+        public static string ClientSecret { get; }
     }
 }

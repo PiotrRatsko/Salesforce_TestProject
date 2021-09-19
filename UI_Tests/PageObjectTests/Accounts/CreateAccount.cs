@@ -2,26 +2,28 @@
 using FluentAssertions;
 using Tests.PageObject;
 using Tests.Entities;
+using Tests.PageObjectTests;
 
-namespace Tests.PageObjectTests.Accounts
+namespace PageObjectTests.Accounts
 {
-    public class CreateAccount : BaseTest
+    public class CreateAccount : BaseUITest
     {
-        readonly Account account = new() { AccountName = "Test Account", Description = "Test Description", Type = "Customer" };
+        readonly Account expectedAccount = new() { Name = "Test Account", Description = "Test Description", Type = "Customer - Direct" };
 
         [Test]
+        [Category("UI")]
         [Retry(2)]
         public void CreateAccountTest()
         {
-            account.Validate();
+            expectedAccount.Validate();
 
             AccountsPage ap = new AccountsPage(driver)
                 .GetPageDirectly()
-                .AddNewAccount(account);
+                .AddNewAccount(expectedAccount);
 
             Account actualAccount = ap.GetAccount("Test Account");
 
-            account.Should().BeEquivalentTo(actualAccount);
+            expectedAccount.Should().BeEquivalentTo(actualAccount);
         }
     }
 }

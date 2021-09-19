@@ -9,11 +9,11 @@ namespace Tests.PageObject
     {
         private readonly IWebDriver driver;
         #region IWebElements
-        private readonly By SaveBtn = By.CssSelector("button[title='Save']"); //button for save new account
-        private readonly By AccountName = By.XPath("//div[@class ='actionBody']//span[text()='Account Name']/../following-sibling::div//input");
-        private readonly By TypeBtn = By.XPath("//span[text()='Type']/../following-sibling::div[@class='uiMenu']//div[@class='uiPopupTrigger']"); //button for expand Type menu
-        private readonly string Type = "//div[@aria-labelledby='{0}']//a[@title='{1}']"; //path to choose need type
-        private readonly By Description = By.XPath("//div[@class ='actionBody']//span[text()='Description']/../following-sibling::textarea");
+        private readonly By SaveBtn = By.XPath("//button[text()='Save']"); //button for save new account
+        private readonly By Name = By.XPath("//div[@class ='actionBody']//label[contains(text(),'Name')]/following-sibling::div//input");
+        private readonly By TypeBtn = By.XPath("//label[text()='Type']/..//input[@role='combobox']"); //button for expand Type menu
+        private readonly string Type = "//div[@id='{0}']//lightning-base-combobox-item[@data-value='{1}']"; //path to choose need type
+        private readonly By Description = By.XPath("//div[@class ='actionBody']//label[text()='Description'] /following-sibling::div//textarea");
         #endregion IWebElements
 
         public NewAccountPage(IWebDriver _driver)
@@ -28,18 +28,18 @@ namespace Tests.PageObject
         public void FillAndSaveNewAccount(Account account)
         {
             driver.WaitForTitle(PageTitle);
-            driver.TypeInTextBox(AccountName, account.AccountName);
+            driver.TypeInTextBox(Name, account.Name);
             SelectElementFromMenu(TypeBtn, Type, account.Type);
             driver.TypeInTextBox(Description, account.Description);
+            driver.GetElement(Name).SendKeys(Keys.Enter);
             driver.ClickButton(SaveBtn);
         }
 
-        private void SelectElementFromMenu(By menuLocator, string XPathElementLocator, string elementToAdd)
+        private void SelectElementFromMenu(By typeBtn, string XPathElementLocator, string elementToAdd)
         {
-            IWebElement menu = driver.GetElement(menuLocator);
-            menu.ClickButton();
-            var formatedXPath = string.Format(XPathElementLocator, menu.GetAttribute("id"), elementToAdd);
-            driver.GetElement(By.XPath(formatedXPath)).Click();
+            driver.ClickButton(typeBtn);
+            var formatedXPath = string.Format(XPathElementLocator, driver.GetElement(typeBtn).GetAttribute("aria-owns"), elementToAdd);
+            driver.GetElement(By.XPath(formatedXPath)).ClickButton();
         }
         #endregion Actions 
     }

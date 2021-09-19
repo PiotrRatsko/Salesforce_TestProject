@@ -1,17 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tests.Entities
 {
-    class Account
+    class Account : IEntity
     {
-        [Display(Name = "Account Name")]
         [Required(AllowEmptyStrings = false)]
-        public string AccountName { get; set; }
+        public string Name { get; set; }
 
-        [RegularExpression("Analyst|Customer|Investor")]
+        [RegularExpression("Prospect|Customer - Direct")]
         public string Type { get; set; }
 
-        [Display(Name = "Description")]
         public string Description { get; set; }
     }
 }
