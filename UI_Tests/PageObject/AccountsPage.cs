@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.WebDriverExtention;
-using System.Reflection;
 using Tests.Entities;
 
 namespace Tests.PageObject

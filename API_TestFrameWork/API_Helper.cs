@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using Selenium_TestFrameWork;
 using System.Collections.Generic;
@@ -31,8 +32,9 @@ namespace API_TestFrameWork
         }
 
         //POST Request
-        public static IRestResponse PostRequest(string endPoint, string jsonData, string authToken)
+        public static IRestResponse PostRequest(string endPoint, object obj, string authToken)
         {
+            var jsonData = JsonConvert.SerializeObject(obj);
             return CallingAPI(Method.POST, endPoint, authToken, jsonData);
         }
 

@@ -1,14 +1,11 @@
 ﻿using API_TestFrameWork;
-using NUnit.Allure.Core;
 using NUnit.Framework;
 using Selenium_TestFrameWork.Configuration;
 using System.Collections.Generic;
 
 namespace Tests.APITests
 {
-    [AllureNUnit]
-    [Parallelizable(scope: ParallelScope.Fixtures)]
-    public class BaseAPITest
+    public class BaseAPITest : BaseAllureTest
     {
         protected string authToken;
         readonly Dictionary<string, string> parameters = new()

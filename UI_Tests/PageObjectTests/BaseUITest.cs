@@ -1,21 +1,18 @@
-﻿using NUnit.Framework;
+﻿using Allure.Commons;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
-using Selenium_TestFrameWork.WebDriverExtention;
+using OpenQA.Selenium.Support.Extensions;
 using Selenium_TestFrameWork.Configuration;
 using Selenium_TestFrameWork.CustomException;
+using Selenium_TestFrameWork.WebDriverExtention;
 using System;
-using NUnit.Allure.Core;
-using Allure.Commons;
-using OpenQA.Selenium.Support.Extensions;
 
 namespace Tests.PageObjectTests
 {
-    [AllureNUnit]
-    [Parallelizable(scope: ParallelScope.Fixtures)]
-    public class BaseTest
+    public class BaseUITest : BaseAllureTest
     {
         protected IWebDriver driver;
         private static IWebDriver GetChromeDriver()
@@ -30,10 +27,8 @@ namespace Tests.PageObjectTests
         }
 
         [OneTimeSetUp]
-        public void OneTimeSetup()
+        public void OneTimeSetupBaseUITest()
         {
-            AllureLifecycle.Instance.CleanupResultDirectory();
-
             driver = Config.BrowserType switch
             {
                 BrowserType.Firefox => new FirefoxDriver(),
@@ -43,12 +38,6 @@ namespace Tests.PageObjectTests
             };
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Config.PageLoadTimeout);
             driver.MaxBrowser();
-        }
-
-        [SetUp]
-        public void GetConfiguration()
-        {
-            Config.WriteConfig2Console();
         }
 
         [TearDown]

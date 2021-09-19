@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tests.Entities
 {
-    class Account
+    class Account : IEntity
     {
         [Required(AllowEmptyStrings = false)]
         public string Name { get; set; }
