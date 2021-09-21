@@ -1,7 +1,8 @@
-﻿using API_TestFrameWork;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Selenium_TestFrameWork.Configuration;
 using System.Collections.Generic;
+using Tests.Support;
+using Tests.UITests;
 
 namespace Tests.APITests
 {
@@ -20,7 +21,7 @@ namespace Tests.APITests
         [OneTimeSetUp]
         public void GetToken()
         {
-            authToken = API_Helper.GetToken(Config.LoginEndpoint, parameters);
+            authToken = APIHandler.GetToken(Config.LoginEndpoint, parameters);
         }
     }
 }

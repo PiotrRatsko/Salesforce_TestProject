@@ -10,7 +10,7 @@ using Selenium_TestFrameWork.CustomException;
 using Selenium_TestFrameWork.WebDriverExtention;
 using System;
 
-namespace Tests.PageObjectTests
+namespace Tests.UITests
 {
     public class BaseUITest : BaseAllureTest
     {

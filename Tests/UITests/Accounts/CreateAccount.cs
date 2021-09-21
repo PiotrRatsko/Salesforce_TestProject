@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
-using FluentAssertions;
-using Tests.PageObject;
 using Tests.Entities;
-using Tests.PageObjectTests;
+using Tests.PageObject;
+using Tests.Support;
+using Tests.UITests;
 
-namespace PageObjectTests.Accounts
+namespace UITests
 {
     public class CreateAccount : BaseUITest
     {
@@ -12,18 +12,18 @@ namespace PageObjectTests.Accounts
 
         [Test]
         [Category("UI")]
-        [Retry(2)]
+        [Retry(1)]
         public void CreateAccountTest()
         {
-            expectedAccount.Validate();
+            expectedAccount.Validate<SetUIAttribute>();
 
             AccountsPage ap = new AccountsPage(driver)
                 .GetPageDirectly()
-                .AddNewAccount(expectedAccount);
+                .AddNewSObject(expectedAccount);
 
-            Account actualAccount = ap.GetAccount("Test Account");
+            Account actualAccount = ap.GetSObjectPage("Test Account").GetDetails<Account>();
 
-            expectedAccount.Should().BeEquivalentTo(actualAccount);
+            expectedAccount.IsEqual<GetUIAttribute>(actualAccount);
         }
     }
 }

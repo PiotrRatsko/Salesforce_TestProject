@@ -3,10 +3,12 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using Selenium_TestFrameWork;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
-namespace API_TestFrameWork
+namespace Tests.Support
 {
-    public class API_Helper
+    public class APIHandler
     {
         private static IRestResponse CallingAPI(Method httpMethod, string endPoint, string authToken, string jsonData = "")
         {
@@ -34,7 +36,12 @@ namespace API_TestFrameWork
         //POST Request
         public static IRestResponse PostRequest(string endPoint, object obj, string authToken)
         {
-            var jsonData = JsonConvert.SerializeObject(obj);
+            Dictionary<string, object> dict = new();
+            foreach (var prop in obj.GetType().GetProperties().Where(prop => prop.GetCustomAttribute<APIAttribute>() != null))
+            {
+                dict.Add(prop.Name, prop.GetValue(obj));
+            }
+            var jsonData = JsonConvert.SerializeObject(dict);
             return CallingAPI(Method.POST, endPoint, authToken, jsonData);
         }
 
@@ -65,5 +72,4 @@ namespace API_TestFrameWork
             return (string)obj["access_token"];
         }
     }
-
 }

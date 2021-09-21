@@ -2,17 +2,20 @@
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.CustomException;
 using Selenium_TestFrameWork.WebDriverExtention;
+using System;
+using Tests.Entities;
+using Tests.Support;
 
-namespace Tests.PageObject
+namespace Tests.PageObject.Abstracts
 {
     abstract class BasePage<T> where T : BasePage<T>
     {
         protected readonly IWebDriver driver;
-        private readonly LoginPage loginPage;
+        protected readonly LoginPage loginPage;
 
         #region IWebElements
-        protected readonly By AccountsBtn = By.XPath("//a[@title='Accounts']"); //accounts button
-        protected readonly By ContactsBtn = By.XPath("//a[@title='Contacts']"); //contacts button
+        protected readonly By NewSObjectBtn = By.CssSelector("a[class='forceActionLink'][title='New']");
+        protected readonly string sObjectNamePath = "(//a[@title='{0}'])[1]"; //find sObject by name
         #endregion IWebElements
 
         public BasePage(IWebDriver _driver)
@@ -22,9 +25,13 @@ namespace Tests.PageObject
             loginPage = new LoginPage(_driver);
         }
 
+        public abstract IEntity Entity { get; set; }
+        public abstract NewSObjectPage NewSObjectPage { get; set; }
+        public abstract SObjectPage SObjectPage { get; set; }
+        public abstract By PageButton { get; set; }
         public abstract string PageUrl { get; set; }
         public abstract string PageTitle { get; set; }
-
+        
         #region Actions
         public T CheckPageTilte()
         {
@@ -60,18 +67,29 @@ namespace Tests.PageObject
             return this as T;
         }
 
-        public AccountsPage ClickAccountsBtn()
+        public SObjectPage GetSObjectPage(string sObjectName)
         {
-            driver.ClickButton(AccountsBtn);
+            ClickThisSObjectsPageBtn();
             driver.WaitForTitle(PageTitle);
-            return this as AccountsPage;
+            var formatedXPath = string.Format(sObjectNamePath, sObjectName);
+            driver.ClickButton(By.XPath(formatedXPath));
+            driver.WaitForTitle($"{sObjectName} | Salesforce");
+            return (this as T).SObjectPage;
         }
 
-        public ContactsPage ClickContactsBtn()
+        private T ClickThisSObjectsPageBtn()
         {
-            driver.ClickButton(ContactsBtn);
+            driver.ClickButton(PageButton);
             driver.WaitForTitle(PageTitle);
-            return this as ContactsPage;
+            return this as T;
+        }
+
+        public T AddNewSObject(IEntity entity)
+        {
+            driver.WaitForTitle(PageTitle);
+            driver.ClickButton(NewSObjectBtn);
+            (this as T).NewSObjectPage.FillAndSaveNewSObject(entity);
+            return ClickThisSObjectsPageBtn() as T;
         }
         #endregion Actions
     }

@@ -1,15 +1,15 @@
-﻿using API_TestFrameWork;
-using FluentAssertions;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Selenium_TestFrameWork.Configuration;
 using System.Net;
 using Tests.APITests;
 using Tests.Entities;
+using Tests.Support;
 
-namespace APITests.Accounts
+namespace APITests
 {
     public class CreateAccount : BaseAPITest
     {
+        string accountId = default;
         readonly Account expectedAccount = new() { Name = "API Test Account", Description = "API Test Description", Type = "Customer - Direct" };
         readonly string endPoint = $"{Config.ApiBaseUrl}/Account/";
 
@@ -17,21 +17,30 @@ namespace APITests.Accounts
         [Category("API")]
         public void CreateAccountTest()
         {
+
+
+            expectedAccount.Validate<APIAttribute>();
+
             //create
-            expectedAccount.Validate();
-            
-            var response = API_Helper.PostRequest(endPoint, expectedAccount, authToken);
+            var response = APIHandler.PostRequest(endPoint, expectedAccount, authToken);
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-            string accountId = response.GetField("id");
+            accountId = response.GetField("id");
 
             //get
-            response = API_Helper.GetRequest(endPoint + accountId, authToken);
+            response = APIHandler.GetRequest(endPoint + accountId, authToken);
             Account actualAccount = response.GetEntity<Account>();
-            expectedAccount.Should().BeEquivalentTo(actualAccount);
+            expectedAccount.IsEqual<APIAttribute>(actualAccount);
+        }
 
+        [TearDown]
+        public void DeleteAccount()
+        {
             //delete
-            response = API_Helper.DeleteRequest(endPoint + accountId, authToken);
-            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            if (accountId != default)
+            {
+                var response = APIHandler.DeleteRequest(endPoint + accountId, authToken);
+                Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            }
         }
     }
 }
