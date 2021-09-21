@@ -3,7 +3,7 @@ using NUnit.Allure.Core;
 using NUnit.Framework;
 using Selenium_TestFrameWork.Configuration;
 
-namespace Tests
+namespace Tests.UITests
 {
     [AllureNUnit]
     [Parallelizable(scope: ParallelScope.Fixtures)]

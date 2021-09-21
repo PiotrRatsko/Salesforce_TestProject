@@ -8,26 +8,29 @@ using Tests.Support;
 
 namespace APITests.Accounts
 {
-    public class CreateAccount : BaseAPITest
+    public class UpdateAccount : BaseAPITest
     {
-        readonly string endPoint = $"{Config.ApiBaseUrl}/Account/";
+        string endPoint => $"{Config.ApiBaseUrl}/Account/{accountId}";
 
         string accountId = default;
         readonly Account requestAccount = new() { Name = Guid.NewGuid().ToString(), Description = "API Test Description", Type = "Customer - Direct" };
 
         [Test]
         [Category("API")]
-        public void CreateAccountTest()
+        public void UpdateAccountTest()
         {
             requestAccount.Validate<APIAttribute>();
 
             //create
-            var response = APIHandler.PostRequest(endPoint, requestAccount, authToken);
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-            accountId = response.GetField("id");
+            accountId = APIHandler.PostRequest(endPoint, requestAccount, authToken).GetField("id");
+
+            //update
+            requestAccount.Description = "Description was updated";
+            var response = APIHandler.PatchRequest(endPoint, requestAccount, authToken);
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
             //get
-            response = APIHandler.GetRequest(endPoint + accountId, authToken);
+            response = APIHandler.GetRequest(endPoint, authToken);
             Account responseAccount = response.GetEntity<Account>();
             requestAccount.IsEqual<APIAttribute>(responseAccount);
         }
@@ -38,7 +41,7 @@ namespace APITests.Accounts
             //delete
             if (accountId != default)
             {
-                var response = APIHandler.DeleteRequest(endPoint + accountId, authToken);
+                var response = APIHandler.DeleteRequest(endPoint, authToken);
                 Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
             }
         }
