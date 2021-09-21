@@ -1,4 +1,5 @@
 ﻿using Allure.Commons;
+using NUnit.Allure.Core;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -9,12 +10,25 @@ using Selenium_TestFrameWork.Configuration;
 using Selenium_TestFrameWork.CustomException;
 using Selenium_TestFrameWork.WebDriverExtention;
 using System;
-using Tests.APITests;
+using System.Collections.Generic;
+using Tests.Support;
 
 namespace Tests.UITests
 {
-    public class BaseUITest : BaseAPITest
+    [AllureNUnit]
+    [Parallelizable(scope: ParallelScope.Fixtures)]
+    public class BaseUITest
     {
+        protected string authToken;
+        readonly Dictionary<string, string> parameters = new()
+        {
+            { "grant_type", "password" },
+            { "client_id", Config.ClientId },
+            { "client_secret", Config.ClientSecret },
+            { "username", Config.UserName },
+            { "password", Config.Password }
+        };
+
         protected IWebDriver driver;
         private static IWebDriver GetChromeDriver()
         {
@@ -30,6 +44,7 @@ namespace Tests.UITests
         [OneTimeSetUp]
         public void OneTimeSetupBaseUITest()
         {
+            authToken = APIHandler.GetToken(Config.LoginEndpoint, parameters);
             driver = Config.BrowserType switch
             {
                 BrowserType.Firefox => new FirefoxDriver(),
@@ -39,6 +54,12 @@ namespace Tests.UITests
             };
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Config.PageLoadTimeout);
             driver.MaxBrowser();
+        }
+
+        [SetUp]
+        public void GetConfiguration()
+        {
+            Config.WriteConfig2Console();
         }
 
         [TearDown]
