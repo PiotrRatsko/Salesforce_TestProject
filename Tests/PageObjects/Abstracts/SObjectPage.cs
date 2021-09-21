@@ -16,14 +16,8 @@ namespace Tests.PageObject.Abstracts
         private readonly IWebDriver driver;
 
         #region IWebElements
-        //protected readonly By SaveBtn = By.XPath("//button[text()='Save']"); //button for save new entity
-        //protected readonly string namePath = "//div[@class ='actionBody']//label[text()='{0}']"; //path to name of the field
-        //protected readonly string fieldPath = "//*[@id='{0}']"; //path to type text
-        //protected readonly string comboboxElementPath = "(//div[@id='{0}']//span[@title='{1}'])[1]"; //path to choose
-
         protected readonly By detailsBtn = By.XPath("//div[contains(@class, 'windowViewMode-normal oneContent active')]//li[@title='Details']");
         protected readonly string detailsFieldPath = "(//div[contains(@class,'windowViewMode-normal')]//span[text()='{0}']/../following-sibling::div//slot[@slot='outputField']//*[text() !=''])[1]";
-        //protected readonly string detailsNamePath = "(//div[contains(@class,'windowViewMode-normal')]//span[text()='{0}'])"; //find field name by name
         #endregion IWebElements
 
         public SObjectPage(IWebDriver _driver)
