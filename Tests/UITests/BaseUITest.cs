@@ -9,10 +9,11 @@ using Selenium_TestFrameWork.Configuration;
 using Selenium_TestFrameWork.CustomException;
 using Selenium_TestFrameWork.WebDriverExtention;
 using System;
+using Tests.APITests;
 
 namespace Tests.UITests
 {
-    public class BaseUITest : BaseAllureTest
+    public class BaseUITest : BaseAPITest
     {
         protected IWebDriver driver;
         private static IWebDriver GetChromeDriver()

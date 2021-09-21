@@ -13,7 +13,7 @@ namespace Tests.Support
 {
     static class EntityHandler
     {
-        public static void Validate<T>(this IEntity t) where T : Attribute, IAttribute, ISetAttribute
+        public static IEntity Validate<T>(this IEntity t) where T : Attribute, IAttribute, ISetAttribute
         {
             var results = new List<ValidationResult>();
             var context = new ValidationContext(t);
@@ -35,6 +35,7 @@ namespace Tests.Support
                     throw new Exception($"Try to add not applicable prop. to the request {t} {prop.Name}");
                 }
             }
+            return t;
         }
 
         public static void IsEqual<T>(this IEntity expected, IEntity actual) where T : Attribute, IGetAttribute
@@ -57,7 +58,7 @@ namespace Tests.Support
         {
             T entity = new();
             JObject obj = JObject.Parse(response.Content);
-            foreach (var piInstance in typeof(T).GetProperties())
+            foreach (var piInstance in typeof(T).GetProperties().Where(prop => prop.GetCustomAttribute<APIAttribute>() != null))
             {
                 piInstance.SetValue(entity, (string)obj[piInstance.Name]);
             }

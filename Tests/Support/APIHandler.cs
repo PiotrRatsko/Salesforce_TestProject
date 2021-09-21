@@ -18,7 +18,7 @@ namespace Tests.Support
             request.AddHeader("Authorization", "Bearer " + authToken);
             request.AddHeader("Content-Type", "application/json");
 
-            if (httpMethod == Method.PUT || httpMethod == Method.POST)
+            if (httpMethod == Method.PATCH || httpMethod == Method.POST)
             {
                 request.AddJsonBody(jsonData);
             }
@@ -45,11 +45,17 @@ namespace Tests.Support
             return CallingAPI(Method.POST, endPoint, authToken, jsonData);
         }
 
-        // PUT Request
-        //public static IRestResponse PutRequest(string endPoint, Dictionary<string, string> headers, string jsonData)
-        //{
-        //    return CallingAPI(Method.PUT, endPoint, headers);
-        //}
+        //PUT Request
+        public static IRestResponse PatchRequest(string endPoint, object obj, string authToken)
+        {
+            Dictionary<string, object> dict = new();
+            foreach (var prop in obj.GetType().GetProperties().Where(prop => prop.GetCustomAttribute<APIAttribute>() != null))
+            {
+                dict.Add(prop.Name, prop.GetValue(obj));
+            }
+            var jsonData = JsonConvert.SerializeObject(dict);
+            return CallingAPI(Method.PATCH, endPoint, authToken, jsonData);
+        }
 
         //DELETE Request
         public static IRestResponse DeleteRequest(string endPoint, string authToken)
