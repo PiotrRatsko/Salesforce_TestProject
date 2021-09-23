@@ -1,82 +1,70 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using RestSharp;
 using Selenium_TestFrameWork;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using Tests.Entities;
+using Tests.Support.CustomAttributes;
 
 namespace Tests.Support
 {
-    static class EntityHandler
+    public abstract class EntityHandler<T> where T : EntityHandler<T>
     {
-        public static IEntity Validate<T>(this IEntity t) where T : Attribute, IAttribute, ISetAttribute
+
+        public ExpandoObject TransformTo<T1>() where T1 : Attribute, IAttribute
+        {
+            BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+            PropertyInfo[] properties = this.GetType().GetProperties(flags);
+            ExpandoObject expando = new ExpandoObject();
+            foreach (PropertyInfo property in properties.Where(property => property.GetCustomAttribute<T1>() != null))
+            {
+                expando.TryAdd(property.Name, property.GetValue(this));
+            }
+
+            //var j =JsonConvert.DeserializeObject<JObject>(JsonConvert.SerializeObject(expandoDict));
+            return expando;
+        }
+
+        public T Validate()
         {
             var results = new List<ValidationResult>();
-            var context = new ValidationContext(t);
-            if (!Validator.TryValidateObject(t, context, results, true))
+            var context = new ValidationContext(this);
+            if (!Validator.TryValidateObject(this, context, results, true))
             {
                 foreach (var error in results)
                 {
-                    LogHelper.log.Error($"Validation error of entity {t.GetType().Name}: { error.ErrorMessage}");
+                    LogHelper.log.Error($"Validation error of entity {this.GetType().Name}: { error.ErrorMessage}");
                     Console.WriteLine(error.ErrorMessage);
                 }
-                throw new Exception($"Entity {t.GetType().Name} is not valid");
+                throw new Exception($"Entity {this.GetType().Name} is not valid");
             }
-
-            foreach (var prop in t.GetType().GetProperties())
-            {
-                if (prop.GetCustomAttribute<T>() == null && !string.IsNullOrEmpty(prop.GetValue(t)?.ToString()))
-                {
-                    LogHelper.log.Error($"Try to add not applicable prop. to the request {t} {prop.Name}");
-                    throw new Exception($"Try to add not applicable prop. to the request {t} {prop.Name}");
-                }
-            }
-            return t;
+            return this as T;
         }
 
-        public static void IsEqual<T>(this IEntity expected, IEntity actual) where T : Attribute, IGetAttribute
-        {
-            Assert.Multiple(() =>
-            {
-                foreach (var prop in expected.GetType().GetProperties().Where(prop => prop.GetCustomAttribute<T>() != null))
-                {
-                    var expectedValue = prop.GetValue(expected)?.ToString();
-                    var actualValue = prop.GetValue(actual)?.ToString();
-                    if (string.IsNullOrEmpty(expectedValue)) expectedValue = null;
-                    if (string.IsNullOrEmpty(actualValue)) actualValue = null;
-                    LogHelper.log.Info($"Expected: {prop.Name} = \"{expectedValue}\". Actual: {prop.Name} = \"{actualValue}\"");
-                    Assert.AreEqual(expectedValue, actualValue);
-                }
-            });
-        }
+        //public void IsEqualMy(IEntity actual)
+        //{
+        //    var expectedProp = this.GetType().GetProperties();
+        //    var actualProp = actual.GetType().GetProperties();
 
-        public static T GetEntity<T>(this IRestResponse response) where T : IEntity, new()
-        {
-            T entity = new();
-            JObject obj = JObject.Parse(response.Content);
-            foreach (var piInstance in typeof(T).GetProperties().Where(prop => prop.GetCustomAttribute<APIAttribute>() != null))
-            {
-                piInstance.SetValue(entity, (string)obj[piInstance.Name]);
-            }
-            return entity;
-        }
+        //    CollectionAssert.AreEquivalent(expectedProp, actualProp);
 
-        public static string GetField(this IRestResponse response, string field)
-        {
-            try
-            {
-                JObject obj = JObject.Parse(response.Content);
-                return (string)obj[field];
-            }
-            catch
-            {
-                LogHelper.log.Error("Field did not find: " + field);
-                throw new Exception("Field did not find: " + field);
-            }
-        }
+        //    //Assert.Multiple(() =>
+        //    //{
+        //    //    foreach (var prop in this.GetType().GetProperties())
+        //    //    {
+        //    //        var expectedValue = prop.GetValue(this)?.ToString();
+        //    //        var actualValue = prop.GetValue(actual)?.ToString();
+        //    //        if (string.IsNullOrEmpty(expectedValue)) expectedValue = null;
+        //    //        if (string.IsNullOrEmpty(actualValue)) actualValue = null;
+        //    //        LogHelper.log.Info($"Expected: {prop.Name} = \"{expectedValue}\". Actual: {prop.Name} = \"{actualValue}\"");
+        //    //        Assert.AreEqual(expectedValue, actualValue);
+        //    //    }
+        //    //});
+        //}
     }
 }

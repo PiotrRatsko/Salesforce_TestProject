@@ -31,7 +31,7 @@ namespace Tests.PageObject.Abstracts
         public void FillAndSaveNewSObject(object entity)
         {
             driver.WaitForTitle(PageTitle);
-            foreach (var piInstance in entity.GetType().GetProperties().Where(prop => prop.GetValue(entity) !=null && prop.GetCustomAttribute<SetUIAttribute>() != null))
+            foreach (var piInstance in entity.GetType().GetProperties())
             {
                 string propName = piInstance.GetCustomAttribute<DisplayAttribute>()?.Name;
                 propName ??= piInstance.Name;

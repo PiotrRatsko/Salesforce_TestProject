@@ -1,38 +1,37 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using Tests.Support;
+using Tests.Support.CustomAttributes;
 
 namespace Tests.Entities
 {
     public class Contact : IEntity
     {
-        [SetUI]
-        [API]
+        [PostAPI]
+        [GetAPI]
         [Required(AllowEmptyStrings = false)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [SetUI]
-        [API]
+        [PostAPI]
+        [GetAPI]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [SetUI]
-        [API]
+        [PostAPI]
+        [GetAPI]
         [RegularExpression("Mr.|Ms.")]
         public string Salutation { get; set; } = null;
 
-        [SetUI]
-        [GetUI]
+        [PostAPI]
+        [GetAPI]
         [Display(Name = "Account Name")]
         public string AccountName { get; set; }
 
-        [GetUI]
+        [GetAPI]
         public string Name { get; set; }
 
-        [SetUI]
-        [GetUI]
-        [API]
+        [PostAPI]
+        [GetAPI]
         public string Phone { get; set; }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Tests.Support
+namespace Tests.Support.CustomAttributes
 {
     [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
-    sealed class SetUIAttribute : Attribute, IAttribute, ISetAttribute
+    sealed class PatchAPI : Attribute, IAttributeAPI
     {
     }
 }

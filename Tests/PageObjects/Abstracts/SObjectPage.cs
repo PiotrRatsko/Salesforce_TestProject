@@ -26,13 +26,14 @@ namespace Tests.PageObject.Abstracts
             driver = _driver;
         }
 
+        public abstract IEntity Entity { get; set; }
         public T GetDetails<T>() where T : IEntity, new()
         {
             T entity = new();
             IList<IWebElement> elements;
             driver.ClickButton(detailsBtn);
             Thread.Sleep(2000);
-            foreach (var piInstance in entity.GetType().GetProperties().Where(prop => prop.GetCustomAttribute<GetUIAttribute>() != null))
+            foreach (var piInstance in entity.GetType().GetProperties())
             {
                 string propName = piInstance.GetCustomAttribute<DisplayAttribute>()?.Name;
                 propName ??= piInstance.Name;

@@ -15,7 +15,7 @@ namespace Tests.PageObject
         {
             NewSObjectPage = new NewAccountPage(_driver);
             SObjectPage = new AccountPage(_driver);
-            Entity = new Account();
+            //Entity = new Account();
             LogHelper.log.Info("Initialized : " + GetType().Name);
         }
 
@@ -23,7 +23,7 @@ namespace Tests.PageObject
         override public string PageTitle { get; set; } = "Recently Viewed | Accounts | Salesforce";
         public override NewSObjectPage NewSObjectPage { get; set; }
         public override SObjectPage SObjectPage { get; set; }
-        public override IEntity Entity { get; set; }
+        //public override IEntity Entity { get; set; }
 
         #region Actions
         #endregion Actions 
