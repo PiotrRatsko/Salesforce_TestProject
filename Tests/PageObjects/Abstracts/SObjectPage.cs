@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Tests.Entities;
-using Tests.Support;
 using Tests.Support.CustomAttributes;
 
 namespace Tests.PageObject.Abstracts

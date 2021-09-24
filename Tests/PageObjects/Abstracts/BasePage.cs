@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.CustomException;
 using Selenium_TestFrameWork.WebDriverExtention;
@@ -24,7 +23,6 @@ namespace Tests.PageObject.Abstracts
             loginPage = new LoginPage(_driver);
         }
 
-        //public abstract IEntity Entity { get; set; }
         public abstract NewSObjectPage NewSObjectPage { get; set; }
         public abstract SObjectPage SObjectPage { get; set; }
         public abstract By PageButton { get; set; }

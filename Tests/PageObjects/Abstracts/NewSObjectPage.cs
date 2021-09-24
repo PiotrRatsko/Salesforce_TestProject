@@ -1,12 +1,10 @@
 ﻿using OpenQA.Selenium;
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.WebDriverExtention;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Tests.Entities;
-using Tests.Support;
 using Tests.Support.CustomAttributes;
 
 namespace Tests.PageObject.Abstracts
@@ -38,7 +36,7 @@ namespace Tests.PageObject.Abstracts
                 string propName = piInstance.GetCustomAttribute<DisplayAttribute>()?.Name;
                 propName ??= piInstance.Name;
                 var propValue = piInstance.GetValue(entity)?.ToString();
-                if (propValue==null)
+                if (propValue == null)
                 {
                     continue;
                 }
