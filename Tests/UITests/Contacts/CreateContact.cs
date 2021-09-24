@@ -5,9 +5,8 @@ using Tests.Entities;
 using Tests.PageObject;
 using Tests.Support;
 using Tests.Support.CustomAttributes;
-using Tests.UITests;
 
-namespace UITests.Contacts
+namespace Tests.UITests.Contacts
 {
     public class CreateContact : BaseUITest
     {

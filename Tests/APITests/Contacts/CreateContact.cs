@@ -1,12 +1,11 @@
 ﻿using NUnit.Framework;
 using Selenium_TestFrameWork.Configuration;
 using System.Net;
-using Tests.APITests;
 using Tests.Entities;
 using Tests.Support;
 using Tests.Support.CustomAttributes;
 
-namespace APITests.Contacts
+namespace Tests.APITests.Contacts
 {
     public class CreateContact : BaseAPITest
     {

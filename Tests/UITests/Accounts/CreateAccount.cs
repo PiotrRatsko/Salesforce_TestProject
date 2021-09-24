@@ -4,9 +4,8 @@ using Tests.Entities;
 using Tests.PageObject;
 using Tests.Support;
 using Tests.Support.CustomAttributes;
-using Tests.UITests;
 
-namespace UITests.Accounts
+namespace Tests.UITests.Accounts
 {
     public class CreateAccount : BaseUITest
     {

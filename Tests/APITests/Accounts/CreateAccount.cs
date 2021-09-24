@@ -2,12 +2,11 @@
 using Selenium_TestFrameWork.Configuration;
 using System;
 using System.Net;
-using Tests.APITests;
 using Tests.Entities;
 using Tests.Support;
 using Tests.Support.CustomAttributes;
 
-namespace APITests.Accounts
+namespace Tests.APITests.Accounts
 {
     public class CreateAccount : BaseAPITest
     {
