@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NUnit.Framework;
 using RestSharp;
 using Selenium_TestFrameWork;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using Tests.Entities;
 using Tests.Support.CustomAttributes;
 
@@ -87,26 +85,6 @@ namespace Tests.Support
         {
             JObject jObj = (JObject)JToken.Parse(response.Content);
             jObj.IsContains(expected);
-
-            //Assert.Multiple(() =>
-            //{
-            //    foreach (var prop in expected.Properties())
-            //    {
-            //        var expectedValue = prop.Value?.ToString();
-            //        var actualValue = response.GetField(prop.Name)?.ToString();
-            //        if (string.IsNullOrEmpty(expectedValue)) expectedValue = null;
-            //        if (string.IsNullOrEmpty(actualValue)) actualValue = null;
-            //        if (expectedValue != actualValue)
-            //        {
-            //            LogHelper.log.Error($"{prop.Name}: expected = \"{expectedValue}\", actual = \"{actualValue}\"");
-            //            Assert.AreEqual(expectedValue, actualValue, $"Error in prop. \"{prop.Name}\"");
-            //        }
-            //        else
-            //        {
-            //            LogHelper.log.Info($"{prop.Name}: expected = \"{expectedValue}\", actual = \"{actualValue}\"");
-            //        }
-            //    }
-            //});
         }
     }
 }

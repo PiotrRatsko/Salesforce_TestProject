@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Selenium_TestFrameWork.Configuration;
 using System;
 using System.Net;

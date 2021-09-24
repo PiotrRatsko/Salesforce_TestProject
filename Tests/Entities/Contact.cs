@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using Tests.Support;
 using Tests.Support.CustomAttributes;
 
 namespace Tests.Entities

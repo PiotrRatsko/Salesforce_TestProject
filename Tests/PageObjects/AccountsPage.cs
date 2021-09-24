@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using Selenium_TestFrameWork;
-using Tests.Entities;
 using Tests.PageObject.Abstracts;
 
 namespace Tests.PageObject
