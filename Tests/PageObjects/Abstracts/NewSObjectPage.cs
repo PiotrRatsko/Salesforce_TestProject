@@ -5,7 +5,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using Tests.Entities;
 using Tests.Support;
+using Tests.Support.CustomAttributes;
 
 namespace Tests.PageObject.Abstracts
 {
@@ -28,14 +30,18 @@ namespace Tests.PageObject.Abstracts
 
         public abstract string PageTitle { get; set; }
 
-        public void FillAndSaveNewSObject(object entity)
+        public void FillAndSaveNewSObject(IEntity entity)
         {
             driver.WaitForTitle(PageTitle);
-            foreach (var piInstance in entity.GetType().GetProperties())
+            foreach (var piInstance in entity.GetType().GetProperties().Where(property => property.GetCustomAttribute<SetFieldsUI>() != null))
             {
                 string propName = piInstance.GetCustomAttribute<DisplayAttribute>()?.Name;
                 propName ??= piInstance.Name;
-                var propValue = piInstance.GetValue(entity).ToString();
+                var propValue = piInstance.GetValue(entity)?.ToString();
+                if (propValue==null)
+                {
+                    continue;
+                }
                 IWebElement nameFieldElement = driver.GetElement(By.XPath(string.Format(namePath, propName)));
                 string id = nameFieldElement.GetAttribute("for");
                 string inputField = string.Format(fieldPath, id);

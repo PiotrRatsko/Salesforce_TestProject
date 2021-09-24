@@ -1,47 +1,44 @@
-﻿//using NUnit.Framework;
-//using Selenium_TestFrameWork.Configuration;
-//using System.Net;
-//using Tests.APITests;
-//using Tests.Entities;
-//using Tests.Support;
+﻿using NUnit.Framework;
+using Selenium_TestFrameWork.Configuration;
+using System.Net;
+using Tests.APITests;
+using Tests.Entities;
+using Tests.Support;
+using Tests.Support.CustomAttributes;
 
-//namespace APITests.Contacts
-//{
-//    public class CreateContact : BaseAPITest
-//    {
-//        readonly string endPoint = $"{Config.ApiBaseUrl}/Contact/";
+namespace APITests.Contacts
+{
+    public class CreateContact : BaseAPITest
+    {
+        readonly string endPoint = $"{Config.ApiBaseUrl}/Contact/";
+        readonly Contact contact = new Contact()
+        {
+            Phone = "1",
+            LastName = "Ratsko"
+        }.Validate() as Contact;
 
-//        string contactId = default;
-//        readonly Contact requestContact = new Contact() { Phone = "1", LastName = "b"}
-//            .Validate<APIAttribute>() as Contact;
+        [Test]
+        [Category("API")]
+        public void CreateContactTest()
+        {
+            //create
+            var responsePost = APIHandler.PostRequest(contact, endPoint, authToken);
+            Assert.AreEqual(HttpStatusCode.Created, responsePost.StatusCode);
+            contact.Id = responsePost.GetField("id");
 
-//        [Test]
-//        [Category("API")]
-//        public void CreateContactTest()
-//        {
+            //get
+            var responseGet = APIHandler.GetRequest(contact.Id, endPoint, authToken);
 
-//            //create
-//            var response = APIHandler.PostRequest(endPoint, requestContact, authToken);
-//            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-//            contactId = response.GetField("id");
+            //assert
+            var expectedContact = contact.TransformTo<GetAPI>();
+            responseGet.IsContains(expectedContact);
+        }
 
-//            requestContact.Name = requestContact.LastName;
-
-//            //get
-//            response = APIHandler.GetRequest(endPoint + contactId, authToken);
-//            Contact responseContact = response.GetEntity<Contact>();
-//            requestContact.IsEqual<APIAttribute>(responseContact);
-//        }
-
-//        [TearDown]
-//        public void DeleteContact()
-//        {
-//            //delete
-//            if (contactId != default)
-//            {
-//                var response = APIHandler.DeleteRequest(endPoint + contactId, authToken);
-//                Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
-//            }
-//        }
-//    }
-//}
+        [TearDown]
+        public void DeleteContact()
+        {
+            //delete
+            APIHandler.DeleteRequest(contact.Id, endPoint, authToken);
+        }
+    }
+}

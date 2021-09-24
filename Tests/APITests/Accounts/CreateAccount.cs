@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json.Linq;
+using NUnit.Framework;
 using Selenium_TestFrameWork.Configuration;
 using System;
 using System.Net;
@@ -11,25 +12,24 @@ namespace APITests.Accounts
 {
     public class CreateAccount : BaseAPITest
     {
-        string EndPoint => $"{Config.ApiBaseUrl}/Account/";
+        readonly string endPoint = $"{Config.ApiBaseUrl}/Account/";
         readonly Account account = new Account()
         {
             Name = Guid.NewGuid().ToString(),
             Description = "API"
-        }.Validate();
+        }.Validate() as Account;
 
         [Test]
         [Category("API")]
         public void CreateAccountTest()
         {
             //create
-            var accountToPost = account.TransformTo<PostAPI>();
-            var responsePost = APIHandler.PostRequest(accountToPost, EndPoint, authToken);
+            var responsePost = APIHandler.PostRequest(account, endPoint, authToken);
             Assert.AreEqual(HttpStatusCode.Created, responsePost.StatusCode);
             account.Id = responsePost.GetField("id");
 
             //get
-            var responseGet = APIHandler.GetRequest(account.Id, EndPoint, authToken);
+            var responseGet = APIHandler.GetRequest(account.Id, endPoint, authToken);
 
             //assert
             var expectedAccount = account.TransformTo<GetAPI>();
@@ -40,11 +40,7 @@ namespace APITests.Accounts
         public void DeleteAccount()
         {
             //delete
-            if (account.Id != default)
-            {
-                var response = APIHandler.DeleteRequest(account.Id, EndPoint, authToken);
-                Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
-            }
+            APIHandler.DeleteRequest(account.Id, endPoint, authToken);
         }
     }
 }

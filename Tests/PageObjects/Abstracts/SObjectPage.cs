@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Newtonsoft.Json.Linq;
+using OpenQA.Selenium;
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.WebDriverExtention;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Reflection;
 using System.Threading;
 using Tests.Entities;
 using Tests.Support;
+using Tests.Support.CustomAttributes;
 
 namespace Tests.PageObject.Abstracts
 {
@@ -27,23 +29,22 @@ namespace Tests.PageObject.Abstracts
         }
 
         public abstract IEntity Entity { get; set; }
-        public T GetDetails<T>() where T : IEntity, new()
+        public JObject GetDetails()
         {
-            T entity = new();
-            IList<IWebElement> elements;
+            LogHelper.log.Info($"Start to get entity {this.Entity.GetType()} from Details page");
+            JObject jObj = new();
             driver.ClickButton(detailsBtn);
             Thread.Sleep(2000);
-            foreach (var piInstance in entity.GetType().GetProperties())
+            foreach (var piInstance in this.Entity.GetType().GetProperties().Where(property => property.GetCustomAttribute<GetFieldsUI>() != null))
             {
-                string propName = piInstance.GetCustomAttribute<DisplayAttribute>()?.Name;
-                propName ??= piInstance.Name;
-                var formatedXPath = string.Format(detailsFieldPath, propName);
-                elements = driver.TryGetElements(By.XPath(formatedXPath));
-                if (elements.Count != 0) piInstance.SetValue(entity, elements[0].Text);
-                else piInstance.SetValue(entity, null);
+                string UIName = piInstance.GetCustomAttribute<DisplayAttribute>()?.Name;
+                UIName ??= piInstance.Name;
+                var formatedXPath = string.Format(detailsFieldPath, UIName);
+                var elements = driver.TryGetElements(By.XPath(formatedXPath));
+                if (elements.Count != 0) jObj.TryAdd(piInstance.Name, elements[0].Text);
+                else jObj.TryAdd(piInstance.Name, null);
             }
-            LogHelper.log.Info($"Got entity {entity.GetType()} by name");
-            return entity;
+            return jObj;
         }
     }
 }

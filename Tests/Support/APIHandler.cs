@@ -6,6 +6,8 @@ using Selenium_TestFrameWork;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using Tests.Entities;
+using Tests.Support.CustomAttributes;
 
 namespace Tests.Support
 {
@@ -35,16 +37,18 @@ namespace Tests.Support
         }
 
         //POST Request
-        public static IRestResponse PostRequest(dynamic obj, string endPoint, string authToken)
+        public static IRestResponse PostRequest(IEntity obj, string endPoint, string authToken)
         {
-            var jsonData = JsonConvert.SerializeObject(obj);
+            var objToPost = obj.TransformTo<PostAPI>();
+            var jsonData = JsonConvert.SerializeObject(objToPost);
             return CallingAPI(Method.POST, endPoint, authToken, jsonData);
         }
 
         //PUT Request
-        public static IRestResponse PatchRequest(dynamic obj, string id, string endPoint, string authToken)
+        public static IRestResponse PatchRequest(IEntity obj, string id, string endPoint, string authToken)
         {
-            var jsonData = JsonConvert.SerializeObject(obj);
+            var objToPatch = obj.TransformTo<PatchAPI>();
+            var jsonData = JsonConvert.SerializeObject(objToPatch);
             return CallingAPI(Method.PATCH, endPoint + id, authToken, jsonData);
         }
 
@@ -70,39 +74,39 @@ namespace Tests.Support
 
         public static string GetField(this IRestResponse response, string field)
         {
-            try
+            JObject obj = JObject.Parse(response.Content);
+            if (!obj.ContainsKey(field))
             {
-                JObject obj = JObject.Parse(response.Content);
-                return (string)obj[field];
+                LogHelper.log.Error("Field did not find in the response: " + field);
+                throw new Exception("Field did not find in the response: " + field);
             }
-            catch
-            {
-                LogHelper.log.Error("Field did not find: " + field);
-                throw new Exception("Field did not find: " + field);
-            }
+            return (string)obj[field];
         }
 
-        public static void IsContains(this IRestResponse response, ExpandoObject expected)
+        public static void IsContains(this IRestResponse response, JObject expected)
         {
-            Assert.Multiple(() =>
-            {
-                foreach (var prop in (IDictionary<String, Object>)expected)
-                {
-                    var expectedValue = prop.Value?.ToString();
-                    var actualValue = response.GetField(prop.Key)?.ToString();
-                    if (string.IsNullOrEmpty(expectedValue)) expectedValue = null;
-                    if (string.IsNullOrEmpty(actualValue)) actualValue = null;
-                    if (expectedValue != actualValue)
-                    {
-                        LogHelper.log.Error($"{prop.Key}: expected = \"{expectedValue}\", actual = \"{actualValue}\"");
-                        Assert.AreEqual(expectedValue, actualValue, $"Error in prop. \"{prop.Key}\"");
-                    }
-                    else
-                    {
-                        LogHelper.log.Info($"{prop.Key}: expected = \"{expectedValue}\", actual = \"{actualValue}\"");
-                    }
-                }
-            });
+            JObject jObj = (JObject)JToken.Parse(response.Content);
+            jObj.IsContains(expected);
+
+            //Assert.Multiple(() =>
+            //{
+            //    foreach (var prop in expected.Properties())
+            //    {
+            //        var expectedValue = prop.Value?.ToString();
+            //        var actualValue = response.GetField(prop.Name)?.ToString();
+            //        if (string.IsNullOrEmpty(expectedValue)) expectedValue = null;
+            //        if (string.IsNullOrEmpty(actualValue)) actualValue = null;
+            //        if (expectedValue != actualValue)
+            //        {
+            //            LogHelper.log.Error($"{prop.Name}: expected = \"{expectedValue}\", actual = \"{actualValue}\"");
+            //            Assert.AreEqual(expectedValue, actualValue, $"Error in prop. \"{prop.Name}\"");
+            //        }
+            //        else
+            //        {
+            //            LogHelper.log.Info($"{prop.Name}: expected = \"{expectedValue}\", actual = \"{actualValue}\"");
+            //        }
+            //    }
+            //});
         }
     }
 }

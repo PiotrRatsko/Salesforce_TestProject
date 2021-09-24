@@ -11,30 +11,29 @@ namespace APITests.Accounts
 {
     public class UpdateAccount : BaseAPITest
     {
-        string EndPoint => $"{Config.ApiBaseUrl}/Account/";
+        readonly string endPoint = $"{Config.ApiBaseUrl}/Account/";
         readonly Account account = new Account()
         {
             Name = Guid.NewGuid().ToString(),
             Description = "API Test Description",
             Type = "Customer - Direct"
-        }.Validate();
+        }.Validate() as Account;
 
         [Test]
         [Category("API")]
         public void UpdateAccountTest()
         {
             //create
-            var accountToPost = account.TransformTo<PostAPI>();
-            account.Id = APIHandler.PostRequest(accountToPost, EndPoint, authToken).GetField("id"); ;
+            account.Id = APIHandler.PostRequest(account, endPoint, authToken).GetField("id"); ;
 
             //update
             account.Description = "Description was updated";
-            var accountToUpdate = account.TransformTo<PatchAPI>();
-            var response = APIHandler.PatchRequest(accountToUpdate, account.Id, EndPoint, authToken);
+           
+            var response = APIHandler.PatchRequest(account, account.Id, endPoint, authToken);
             Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
             //get
-            var responseGet = APIHandler.GetRequest(account.Id, EndPoint, authToken);
+            var responseGet = APIHandler.GetRequest(account.Id, endPoint, authToken);
 
             //assert
             var expectedAccount = account.TransformTo<GetAPI>();
@@ -45,11 +44,7 @@ namespace APITests.Accounts
         public void DeleteAccount()
         {
             //delete
-            if (account.Id != default)
-            {
-                var response = APIHandler.DeleteRequest(account.Id, EndPoint, authToken);
-                Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
-            }
+            APIHandler.DeleteRequest(account.Id, endPoint, authToken);
         }
     }
 }
