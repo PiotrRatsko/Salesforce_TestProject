@@ -1,32 +1,43 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using Tests.Support;
+using Tests.Support.CustomAttributes;
 
 namespace Tests.Entities
 {
     public class Account : IEntity
     {
-        [SetUI]
-        [GetUI]
-        [API]
+        [GetAPI]
+        public string Id { get; set; }
+
+        [PatchAPI]
+        [PostAPI]
+        [GetAPI]
+        [SetFieldsUI]
+        [GetFieldsUI]
         [Required(AllowEmptyStrings = false)]
         [Display(Name = "Account Name")]
         public string Name { get; set; }
 
-        [SetUI]
-        [GetUI]
-        [API]
+        [PostAPI]
+        [GetAPI]
+        [PatchAPI]
+        [SetFieldsUI]
+        [GetFieldsUI]
         [RegularExpression("Prospect|Customer - Direct")]
         public string Type { get; set; }
 
-        [SetUI]
-        [GetUI]
-        [API]
+        [PatchAPI]
+        [PostAPI]
+        [GetAPI]
+        [SetFieldsUI]
+        [GetFieldsUI]
         public string Description { get; set; }
 
-        [SetUI]
-        [GetUI]
-        [API]
+        [PatchAPI]
+        [PostAPI]
+        [GetAPI]
+        [SetFieldsUI]
+        [GetFieldsUI]
         public string Phone { get; set; }
     }
 }

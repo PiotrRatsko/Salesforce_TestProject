@@ -1,10 +1,9 @@
-﻿using OpenQA.Selenium;
+﻿using Newtonsoft.Json.Linq;
+using OpenQA.Selenium;
 using Selenium_TestFrameWork;
 using Selenium_TestFrameWork.CustomException;
 using Selenium_TestFrameWork.WebDriverExtention;
-using System;
 using Tests.Entities;
-using Tests.Support;
 
 namespace Tests.PageObject.Abstracts
 {
@@ -25,7 +24,7 @@ namespace Tests.PageObject.Abstracts
             loginPage = new LoginPage(_driver);
         }
 
-        public abstract IEntity Entity { get; set; }
+        //public abstract IEntity Entity { get; set; }
         public abstract NewSObjectPage NewSObjectPage { get; set; }
         public abstract SObjectPage SObjectPage { get; set; }
         public abstract By PageButton { get; set; }
@@ -33,7 +32,7 @@ namespace Tests.PageObject.Abstracts
         public abstract string PageTitle { get; set; }
         
         #region Actions
-        public T CheckPageTilte()
+        private T CheckPageTilte()
         {
             try
             {
@@ -46,13 +45,13 @@ namespace Tests.PageObject.Abstracts
             }
         }
 
-        public T LoadPageByUrl()
+        private T LoadPageByUrl()
         {
             driver.NavigateToUrl(PageUrl);
             return this as T;
         }
 
-        public T LogInIfNeed(string userName = null, string password = null)
+        private T LogInIfNeed(string userName = null, string password = null)
         {
             if (driver.GetPageTitle() == loginPage.pageTitle)
             {

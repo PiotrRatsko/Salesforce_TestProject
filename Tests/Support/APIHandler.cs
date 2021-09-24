@@ -1,14 +1,17 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NUnit.Framework;
 using RestSharp;
 using Selenium_TestFrameWork;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using System.Dynamic;
+using Tests.Entities;
+using Tests.Support.CustomAttributes;
 
 namespace Tests.Support
 {
-    public class APIHandler
+    public static class APIHandler
     {
         private static IRestResponse CallingAPI(Method httpMethod, string endPoint, string authToken, string jsonData = "")
         {
@@ -28,39 +31,31 @@ namespace Tests.Support
         }
 
         // GET Request
-        public static IRestResponse GetRequest(string endPoint, string authToken)
+        public static IRestResponse GetRequest(string id, string endPoint, string authToken)
         {
-            return CallingAPI(Method.GET, endPoint, authToken);
+            return CallingAPI(Method.GET, endPoint + id, authToken);
         }
 
         //POST Request
-        public static IRestResponse PostRequest(string endPoint, object obj, string authToken)
+        public static IRestResponse PostRequest(IEntity obj, string endPoint, string authToken)
         {
-            Dictionary<string, object> dict = new();
-            foreach (var prop in obj.GetType().GetProperties().Where(prop => prop.GetCustomAttribute<APIAttribute>() != null))
-            {
-                dict.Add(prop.Name, prop.GetValue(obj));
-            }
-            var jsonData = JsonConvert.SerializeObject(dict);
+            var objToPost = obj.TransformTo<PostAPI>();
+            var jsonData = JsonConvert.SerializeObject(objToPost);
             return CallingAPI(Method.POST, endPoint, authToken, jsonData);
         }
 
         //PUT Request
-        public static IRestResponse PatchRequest(string endPoint, object obj, string authToken)
+        public static IRestResponse PatchRequest(IEntity obj, string id, string endPoint, string authToken)
         {
-            Dictionary<string, object> dict = new();
-            foreach (var prop in obj.GetType().GetProperties().Where(prop => prop.GetCustomAttribute<APIAttribute>() != null))
-            {
-                dict.Add(prop.Name, prop.GetValue(obj));
-            }
-            var jsonData = JsonConvert.SerializeObject(dict);
-            return CallingAPI(Method.PATCH, endPoint, authToken, jsonData);
+            var objToPatch = obj.TransformTo<PatchAPI>();
+            var jsonData = JsonConvert.SerializeObject(objToPatch);
+            return CallingAPI(Method.PATCH, endPoint + id, authToken, jsonData);
         }
 
         //DELETE Request
-        public static IRestResponse DeleteRequest(string endPoint, string authToken)
+        public static IRestResponse DeleteRequest(string id, string endPoint, string authToken)
         {
-            return CallingAPI(Method.DELETE, endPoint, authToken);
+            return CallingAPI(Method.DELETE, endPoint + id, authToken);
         }
 
         public static string GetToken(string endPoint, Dictionary<string, string> parameters)
@@ -74,8 +69,44 @@ namespace Tests.Support
 
             IRestResponse response = client.Execute(request);
             LogHelper.log.Info($"Got token: {response.StatusCode}");
+            return response.GetField("access_token");
+        }
+
+        public static string GetField(this IRestResponse response, string field)
+        {
             JObject obj = JObject.Parse(response.Content);
-            return (string)obj["access_token"];
+            if (!obj.ContainsKey(field))
+            {
+                LogHelper.log.Error("Field did not find in the response: " + field);
+                throw new Exception("Field did not find in the response: " + field);
+            }
+            return (string)obj[field];
+        }
+
+        public static void IsContains(this IRestResponse response, JObject expected)
+        {
+            JObject jObj = (JObject)JToken.Parse(response.Content);
+            jObj.IsContains(expected);
+
+            //Assert.Multiple(() =>
+            //{
+            //    foreach (var prop in expected.Properties())
+            //    {
+            //        var expectedValue = prop.Value?.ToString();
+            //        var actualValue = response.GetField(prop.Name)?.ToString();
+            //        if (string.IsNullOrEmpty(expectedValue)) expectedValue = null;
+            //        if (string.IsNullOrEmpty(actualValue)) actualValue = null;
+            //        if (expectedValue != actualValue)
+            //        {
+            //            LogHelper.log.Error($"{prop.Name}: expected = \"{expectedValue}\", actual = \"{actualValue}\"");
+            //            Assert.AreEqual(expectedValue, actualValue, $"Error in prop. \"{prop.Name}\"");
+            //        }
+            //        else
+            //        {
+            //            LogHelper.log.Info($"{prop.Name}: expected = \"{expectedValue}\", actual = \"{actualValue}\"");
+            //        }
+            //    }
+            //});
         }
     }
 }

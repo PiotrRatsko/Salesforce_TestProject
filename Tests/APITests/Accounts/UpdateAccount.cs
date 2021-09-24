@@ -5,45 +5,46 @@ using System.Net;
 using Tests.APITests;
 using Tests.Entities;
 using Tests.Support;
+using Tests.Support.CustomAttributes;
 
 namespace APITests.Accounts
 {
     public class UpdateAccount : BaseAPITest
     {
-        string endPoint => $"{Config.ApiBaseUrl}/Account/{accountId}";
-
-        string accountId = default;
-        readonly Account requestAccount = new() { Name = Guid.NewGuid().ToString(), Description = "API Test Description", Type = "Customer - Direct" };
+        readonly string endPoint = $"{Config.ApiBaseUrl}/Account/";
+        readonly Account account = new Account()
+        {
+            Name = Guid.NewGuid().ToString(),
+            Description = "API Test Description",
+            Type = "Customer - Direct"
+        }.Validate() as Account;
 
         [Test]
         [Category("API")]
         public void UpdateAccountTest()
         {
-            requestAccount.Validate<APIAttribute>();
-
             //create
-            accountId = APIHandler.PostRequest(endPoint, requestAccount, authToken).GetField("id");
+            account.Id = APIHandler.PostRequest(account, endPoint, authToken).GetField("id"); ;
 
             //update
-            requestAccount.Description = "Description was updated";
-            var response = APIHandler.PatchRequest(endPoint, requestAccount, authToken);
+            account.Description = "Description was updated";
+           
+            var response = APIHandler.PatchRequest(account, account.Id, endPoint, authToken);
             Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
             //get
-            response = APIHandler.GetRequest(endPoint, authToken);
-            Account responseAccount = response.GetEntity<Account>();
-            requestAccount.IsEqual<APIAttribute>(responseAccount);
+            var responseGet = APIHandler.GetRequest(account.Id, endPoint, authToken);
+
+            //assert
+            var expectedAccount = account.TransformTo<GetAPI>();
+            responseGet.IsContains(expectedAccount);
         }
 
         [TearDown]
         public void DeleteAccount()
         {
             //delete
-            if (accountId != default)
-            {
-                var response = APIHandler.DeleteRequest(endPoint, authToken);
-                Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
-            }
+            APIHandler.DeleteRequest(account.Id, endPoint, authToken);
         }
     }
 }

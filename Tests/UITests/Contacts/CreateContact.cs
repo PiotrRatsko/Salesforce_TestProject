@@ -4,45 +4,49 @@ using System;
 using Tests.Entities;
 using Tests.PageObject;
 using Tests.Support;
+using Tests.Support.CustomAttributes;
 using Tests.UITests;
 
 namespace UITests.Contacts
 {
     public class CreateContact : BaseUITest
     {
-        Account account;
-        Contact contact;
-        string accountName;
         string accountId;
 
-        [SetUp]
-        public void SetUp()
+        readonly Account account = new Account()
         {
-            accountName = Guid.NewGuid().ToString();
-            account = new Account() { Name = accountName, Description = "Test Description", Type = "Customer - Direct" }
-                .Validate<APIAttribute>() as Account;
-            accountId = APIHandler.PostRequest($"{Config.ApiBaseUrl}/Account/", account, authToken).GetField("id");
+            Name = Guid.NewGuid().ToString(),
+            Description = "Test Description",
+            Type = "Customer - Direct"
+        }.Validate() as Account;
 
-            contact = new Contact() { LastName = "Ratsko", FirstName = "Piotr", Salutation = "Mr.", AccountName = accountName }
-                .Validate<SetUIAttribute>() as Contact;
-        }
+        Contact contact => new Contact()
+        {
+            LastName = "Ratsko",
+            FirstName = "Piotr",
+            Salutation = "Mr.",
+            AccountName = account.Name
+        }.Validate() as Contact;
 
         [Test]
         [Category("UI")]
         [Retry(1)]
         public void CreateContactTest()
         {
-            ContactsPage cp = new ContactsPage(driver).GetPageDirectly().AddNewSObject(contact);
-            Contact expectedContact = new() { Name = $"{contact.Salutation} {contact.FirstName} {contact.LastName}", AccountName = accountName };
-            Contact actualContact = cp.GetSObjectPage("Piotr Ratsko").GetDetails<Contact>();
+            //cteate account by API and get the Account id
+            accountId = APIHandler.PostRequest(account, $"{Config.ApiBaseUrl}/Account/", authToken).GetField("id");
 
-            expectedContact.IsEqual<GetUIAttribute>(actualContact);
+            ContactsPage cp = new ContactsPage(driver).GetPageDirectly().AddNewSObject(contact);
+            var expectedContact = contact.TransformTo<GetFieldsUI>();
+            var actualContact = cp.GetSObjectPage($"{contact.FirstName} {contact.LastName}").GetDetails();
+
+            actualContact.IsContains(expectedContact);
         }
 
         [TearDown]
         public void TearDownUI()
         {
-            APIHandler.DeleteRequest($"{Config.ApiBaseUrl}/Account/{accountId}", authToken);
+            APIHandler.DeleteRequest(accountId, $"{Config.ApiBaseUrl}/Account/", authToken);
         }
     }
 }

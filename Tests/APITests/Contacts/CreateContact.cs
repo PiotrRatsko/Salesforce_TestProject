@@ -4,44 +4,41 @@ using System.Net;
 using Tests.APITests;
 using Tests.Entities;
 using Tests.Support;
+using Tests.Support.CustomAttributes;
 
 namespace APITests.Contacts
 {
     public class CreateContact : BaseAPITest
     {
         readonly string endPoint = $"{Config.ApiBaseUrl}/Contact/";
-
-        string contactId = default;
-        readonly Contact requestContact = new Contact() { Phone = "1", LastName = "b"}
-            .Validate<APIAttribute>() as Contact;
+        readonly Contact contact = new Contact()
+        {
+            Phone = "1",
+            LastName = "Ratsko"
+        }.Validate() as Contact;
 
         [Test]
         [Category("API")]
         public void CreateContactTest()
         {
-
             //create
-            var response = APIHandler.PostRequest(endPoint, requestContact, authToken);
-            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-            contactId = response.GetField("id");
-
-            requestContact.Name = requestContact.LastName;
+            var responsePost = APIHandler.PostRequest(contact, endPoint, authToken);
+            Assert.AreEqual(HttpStatusCode.Created, responsePost.StatusCode);
+            contact.Id = responsePost.GetField("id");
 
             //get
-            response = APIHandler.GetRequest(endPoint + contactId, authToken);
-            Contact responseContact = response.GetEntity<Contact>();
-            requestContact.IsEqual<APIAttribute>(responseContact);
+            var responseGet = APIHandler.GetRequest(contact.Id, endPoint, authToken);
+
+            //assert
+            var expectedContact = contact.TransformTo<GetAPI>();
+            responseGet.IsContains(expectedContact);
         }
 
         [TearDown]
         public void DeleteContact()
         {
             //delete
-            if (contactId != default)
-            {
-                var response = APIHandler.DeleteRequest(endPoint + contactId, authToken);
-                Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
-            }
+            APIHandler.DeleteRequest(contact.Id, endPoint, authToken);
         }
     }
 }
