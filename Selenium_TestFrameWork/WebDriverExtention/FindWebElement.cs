@@ -47,9 +47,8 @@ namespace Selenium_TestFrameWork.WebDriverExtention
             }
         }
 
-        public static IList<IWebElement> TryGetElements(this IWebDriver driver, By locator, int totalMilliseconds = 0)
+        public static IList<IWebElement> TryGetElements(this IWebDriver driver, By locator)
         {
-            Thread.Sleep(totalMilliseconds);
             LogHelper.log.Info("Try to get WebElements: " + locator.ToString());
             return driver.FindElements(locator);
         }

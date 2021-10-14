@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using Tests.Entities;
 using Tests.Support.CustomAttributes;
 
@@ -33,7 +32,6 @@ namespace Tests.PageObject.Abstracts
             LogHelper.log.Info($"Start to get entity {this.Entity.GetType()} from Details page");
             JObject jObj = new();
             driver.ClickButton(detailsBtn);
-            Thread.Sleep(2000);
             foreach (var piInstance in this.Entity.GetType().GetProperties().Where(property => property.GetCustomAttribute<GetFieldsUI>() != null))
             {
                 string UIName = piInstance.GetCustomAttribute<DisplayAttribute>()?.Name;

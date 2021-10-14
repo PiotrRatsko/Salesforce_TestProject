@@ -20,7 +20,6 @@ namespace Selenium_TestFrameWork.Configuration
             UserName = config["UserName"];
             Password = config["Password"];
             ScreenshotStorage = config["ScreenshotStorage"];
-            PageLoadTimeout = int.Parse(config["PageLoadTimeout"]);
             ElementLoadTimeout = int.Parse(config["ElementLoadTimeout"]);
             LoginEndpoint = config["LoginEndpoint"];
             ApiBaseUrl = config["ApiBaseUrl"];
@@ -44,7 +43,6 @@ namespace Selenium_TestFrameWork.Configuration
         public static string Password { get; }
         public static string WebSite { get; }
         public static string ScreenshotStorage { get; }
-        public static int PageLoadTimeout { get; }
         public static int ElementLoadTimeout { get; }
         public static string LoginEndpoint { get; }
         public static string ApiBaseUrl { get; }
