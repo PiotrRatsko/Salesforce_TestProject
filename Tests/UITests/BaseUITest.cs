@@ -74,7 +74,6 @@ namespace Tests.UITests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            driver?.Close();
             driver?.Quit();
         }
     }

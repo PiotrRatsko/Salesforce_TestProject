@@ -7,7 +7,7 @@ namespace Selenium_TestFrameWork.WebDriverExtention
 {
     public static class Button
     {
-        public static void ClickButton(this IWebDriver driver, By locator, int sleepTime = 500)
+        public static void ClickButton(this IWebDriver driver, By locator, int sleepTime = 1000)
         {
             LogHelper.log.Info("Click button: " + locator.ToString());
             IWebElement element = driver.GetElement(locator);
