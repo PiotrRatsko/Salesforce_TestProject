@@ -27,7 +27,6 @@ namespace Selenium_TestFrameWork.WebDriverExtention
                 throw new NoSuchWindowException("Invalid Browser Window Index " + index);
             }
             driver.SwitchTo().Window(windows[index]);
-            Thread.Sleep(1000);
             driver.MaxBrowser();
         }
 

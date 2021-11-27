@@ -5,7 +5,7 @@ namespace Selenium_TestFrameWork.WebDriverExtention
     public static class CheckBox
     {
         private static IWebElement element;
-        public static bool IsCheckBoxchecked(this IWebDriver driver, By locator)
+        public static bool IsCheckBoxChecked(this IWebDriver driver, By locator)
         {
             element = driver.GetElement(locator);
             string flag = element.GetAttribute("checked");

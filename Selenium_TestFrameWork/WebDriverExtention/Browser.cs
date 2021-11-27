@@ -10,7 +10,7 @@ namespace Selenium_TestFrameWork.WebDriverExtention
             LogHelper.log.Info("Max browser");
         }
 
-        public static void GoFoward(this IWebDriver driver)
+        public static void GoForward(this IWebDriver driver)
         {
             driver.Navigate().Forward();
         }

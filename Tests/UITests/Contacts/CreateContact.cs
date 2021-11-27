@@ -32,7 +32,7 @@ namespace Tests.UITests.Contacts
         [Retry(1)]
         public void CreateContactTest()
         {
-            //cteate account by API and get the Account id
+            //create account by API and get the Account id
             accountId = APIHandler.PostRequest(account, $"{Config.ApiBaseUrl}/Account/", authToken).GetField("id");
 
             ContactsPage cp = new ContactsPage(driver).GetPageDirectly().AddNewSObject(contact);

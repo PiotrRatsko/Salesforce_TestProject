@@ -52,7 +52,6 @@ namespace Tests.UITests
                 BrowserType.IExplorer => new InternetExplorerDriver(),
                 _ => throw new NoSuitableDriverFound("Driver Not Found: {0}" + Config.BrowserType.ToString()),
             };
-            driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(Config.PageLoadTimeout);
             driver.MaxBrowser();
         }
 
@@ -67,7 +66,7 @@ namespace Tests.UITests
         {
             if (TestContext.CurrentContext.Result.Outcome.Status.ToString().Equals("Failed"))
             {
-                AllureLifecycle.Instance.AddAttachment($"Screenshot [{DateTime.Now:HH:mm:ss}]",
+                AllureLifecycle.Instance.AddAttachment($"ScreenShot [{DateTime.Now:HH:mm:ss}]",
                 "image/png", driver.TakeScreenshot().AsByteArray);
             }
         }
@@ -75,7 +74,6 @@ namespace Tests.UITests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            driver?.Close();
             driver?.Quit();
         }
     }
